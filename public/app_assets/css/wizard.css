@@ -1,0 +1,147 @@
+.wizard-container {
+    max-width: 700px; /* Max width for the wizard */
+    margin: 50px auto; /* Centering the wizard */
+    background-color: #ffffff; /* White background for the card */
+    border-radius: 0.75rem; /* Rounded corners for the card */
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1); /* Soft shadow */
+    overflow: hidden; /* Ensures content respects border radius */
+}
+
+.wizard-header {
+    background-color: #0d6efd; /* Bootstrap primary blue */
+    color: white;
+    padding: 1.5rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.wizard-header h3 {
+    margin-bottom: 0;
+}
+
+.step-indicator-container {
+    padding: 1.5rem;
+    border-bottom: 1px solid #dee2e6; /* Light border */
+    background-color: #f8f9fa; /* Slightly different background for indicators */
+}
+
+.step-indicator-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    position: relative; /* For pseudo-elements if needed for lines */
+}
+
+.step-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #e9ecef; /* Default background for step circle */
+    color: #495057; /* Default text color for step circle */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 600; /* Semi-bold font weight */
+    border: 2px solid #adb5bd; /* Default border for step circle */
+    transition: all 0.3s ease;
+    margin-bottom: 0.5rem; /* Space between circle and label */
+}
+
+.step-label {
+    font-size: 0.85rem; /* Slightly smaller font for step label */
+    color: #6c757d; /* Muted text color for step label */
+    font-weight: 500;
+}
+
+/* Active state for step indicator */
+.step-indicator-item.active .step-circle {
+    background-color: #0d6efd; /* Primary blue for active step */
+    color: white;
+    border-color: #0d6efd;
+}
+.step-indicator-item.active .step-label {
+    color: #0d6efd; /* Primary blue for active label */
+    font-weight: 600;
+}
+
+/* Completed state for step indicator */
+.step-indicator-item.completed .step-circle {
+    background-color: #198754; /* Success green for completed step */
+    color: white;
+    border-color: #198754;
+}
+.step-indicator-item.completed .step-label {
+    color: #198754; /* Success green for completed label */
+}
+
+/* Line connecting step indicators */
+.step-indicator-line {
+    flex-grow: 1;
+    height: 2px;
+    background-color: #adb5bd; /* Default line color */
+    margin: 0 0.5rem; /* Spacing around the line */
+    position: relative;
+    top: -2rem; /* Align with the center of the circles */
+}
+.step-indicator-item.completed + .step-indicator-line {
+    background-color: #198754; /* Green line for completed steps */
+}
+.step-indicator-item.active + .step-indicator-line {
+    /* Could add a different style for line leading to active step if desired */
+}
+
+.form-step {
+    display: none; /* Hide steps by default */
+    padding: 2rem; /* Padding within each step */
+    animation: fadeIn 0.5s; /* Simple fade-in animation */
+}
+
+.form-step.active {
+    display: block; /* Show active step */
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.wizard-footer {
+    padding: 1.5rem;
+    border-top: 1px solid #dee2e6; /* Light border */
+    background-color: #f8f9fa; /* Consistent with indicator background */
+}
+
+/* Style for form elements for better spacing and appearance */
+.form-floating > .form-control,
+.form-floating > .form-select {
+    height: calc(3.5rem + 2px);
+    line-height: 1.25;
+}
+.form-floating > label {
+    padding: 1rem 0.75rem;
+}
+.form-check-input {
+    width: 1.25em;
+    height: 1.25em;
+}
+.form-check-label {
+    padding-left: 0.25em;
+}
+
+
+/* Message area for success/error */
+#messageArea {
+    display: none; /* Hidden by default */
+    margin-top: 1rem;
+    padding: 1rem;
+    border-radius: 0.5rem;
+}
+#messageArea.success {
+    background-color: #d1e7dd; /* Bootstrap success alert background */
+    color: #0f5132; /* Bootstrap success alert text color */
+    border: 1px solid #badbcc; /* Bootstrap success alert border color */
+}
