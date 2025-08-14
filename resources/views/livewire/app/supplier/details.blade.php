@@ -144,11 +144,13 @@
                                                 <div class="col-lg-9 col-md-8">{{$count_visit_log ?? '-' }} kali</div>
                                             </div>
 
+                                            @if(!empty($count_visit_log))
                                             <div class="row">
                                                 <div class="col-lg-3 col-md-4 label"></div>
                                                 <div class="col-lg-9 col-md-8"><a wire:navigate href="{{route('appSupplierVisitLogsPage', ['supplierId' => $supplierData['id']])}}" class="btn btn-success btn-sm"><i class="bi bi-clock-history me-1"></i>Riwayat Kunjungan</a></div>
                                                 
                                             </div>
+                                            @endif
                                         </div>
 
                                     </div>
