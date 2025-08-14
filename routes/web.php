@@ -34,6 +34,7 @@ use App\Livewire\App\Reports\Index as ReportPage;
 use App\Livewire\App\Reports\Graph as GraphReportPage;
 
 use App\Livewire\App\Supplier\Details as SupplierDetailPage;
+use App\Livewire\App\Supplier\VisitHistory as SupplierVisitLogsPage;
 use App\Livewire\App\Supplier\Edit as SupplierEditDataPage;
 use App\Livewire\App\Supplier\Index as SupplierIndexPage;
 use App\Livewire\App\Supplier\Register as RegisterSupplierPage;
@@ -74,6 +75,7 @@ Route::get('/app/suppliers', SupplierIndexPage::class)->name('appSupplierIndexPa
 Route::get('/app/suppliers/register', RegisterSupplierPage::class)->name('appRegisterSupplierPage');
 Route::get('/app/suppliers/all', AllSuppliersPage::class)->name('appShowAllSupplierPage');
 Route::get('/app/suppliers/{supplierId}/details', SupplierDetailPage::class)->name('appSupplierDetailPage');
+Route::get('/app/suppliers/{supplierId}/details/visit-logs', SupplierVisitLogsPage::class)->name('appSupplierVisitLogsPage');
 Route::get('/app/suppliers/details/{supplierId}/edit', SupplierEditDataPage::class)->name('appSupplierEditDataPage');
 Route::get('/app/suppliers/{query}/search', SupplierSearchResultPage::class)->name('appSupplierSearchResultPage');
 Route::get('/app/suppliers/barcode/scan', SupplierSearchByBarcodePage::class)->name('appSupplierSearchByBarcodePage');

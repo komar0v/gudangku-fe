@@ -6,7 +6,7 @@
     <main id="main" class="main">
 
         <div class="pagetitle">
-            <h1>Informasi Akun</h1>
+            <h1>Informasi Supplier</h1>
             <nav>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="{{route('appDashboardPage')}}">Home</a></li>
@@ -142,6 +142,12 @@
                                             <div class="row">
                                                 <div class="col-lg-3 col-md-4 label">Kunjungan bulan ini</div>
                                                 <div class="col-lg-9 col-md-8">{{$count_visit_log ?? '-' }} kali</div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-lg-3 col-md-4 label"></div>
+                                                <div class="col-lg-9 col-md-8"><a wire:navigate href="{{route('appSupplierVisitLogsPage', ['supplierId' => $supplierData['id']])}}" class="btn btn-success btn-sm"><i class="bi bi-clock-history me-1"></i>Riwayat Kunjungan</a></div>
+                                                
                                             </div>
                                         </div>
 

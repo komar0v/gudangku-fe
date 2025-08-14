@@ -6,7 +6,7 @@
     <main id="main" class="main">
 
         <div class="pagetitle">
-            <h1>Informasi Akun</h1>
+            <h1>Informasi Supplier</h1>
             <nav>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="{{route('appDashboardPage')}}">Home</a></li>
