@@ -4,6 +4,7 @@ namespace App\Livewire\App\Supplier;
 
 use GuzzleHttp\Client;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Layout;
 use App\Livewire\Traits\RequireLogin;
@@ -11,55 +12,18 @@ use GuzzleHttp\Exception\RequestException;
 
 class Register extends Component
 {
-    use RequireLogin;
+    use RequireLogin, WithFileUploads;
 
     #[Layout('components.layouts.applayout')]
-    #[Title('Register New Supplier')]
+    #[Title('Register New Pengrajin')]
 
-    public $nama_supplier, $negara = 'ID', $nomer_telepon_kantor, $email_kantor, $alamat, $website = 'https://www.example.com', $npwp = '00.0000.000000.811', $tentang, $user_id, $kategori_supplier;
-    public $userList, $kategoriSupplierList;
+    public $nama_pengrajin, $nomer_wa, $alamat, $tentang;
+    public $excel_file;
 
     public function mount()
     {
         if (! $this->ensureAuthenticated()) {
             return;
-        }
-
-        try {
-            $client = new Client(['base_uri' => env('API_URL')]);
-
-            $res1 = $client->get('/api/super-admin/manage/get-all-categories', [
-                'headers' => [
-                    'Accept' => 'application/json',
-                    'Authorization' => 'Bearer ' . session('auth_data.token')
-                ],
-            ]);
-
-            $this->kategoriSupplierList = json_decode($res1->getBody()->getContents(), true);
-
-            $res2 = $client->get('/api/super-admin/manage/get-users-not-assigned', [
-                'headers' => [
-                    'Accept' => 'application/json',
-                    'Authorization' => 'Bearer ' . session('auth_data.token')
-                ],
-            ]);
-
-            $this->userList = json_decode($res2->getBody()->getContents(), true);
-        } catch (RequestException $e) {
-            if ($e->hasResponse()) {
-                $response = $e->getResponse();
-                $body = json_decode($response->getBody()->getContents());
-
-                if ($response->getStatusCode() == 403) {
-                    //Forbidden
-                    session()->flash('error_message', 'Forbidden.');
-                    $this->redirectRoute('appDashboardPage');
-                    return;
-                } else {
-                    dd($body);
-                }
-            }
-            throw $e;
         }
     }
 
@@ -71,12 +35,10 @@ class Register extends Component
     public function rules()
     {
         return [
-            'nama_supplier' => 'required',
-            'nomer_telepon_kantor' => 'required|regex:/^\+?[0-9\s\-]{7,20}$/',
-            'email_kantor' => 'required|email',
+            'nama_pengrajin' => 'required',
+            'nomer_wa' => 'required|regex:/^\+?[0-9\s\-]{7,20}$/',
+            'alamat' => 'required',
             'tentang' => 'required',
-            'user_id' => 'required',
-            'kategori_supplier' => 'required',
         ];
     }
 
@@ -85,14 +47,8 @@ class Register extends Component
         $this->validate();
 
         $data = [
-            'user_id' => $this->user_id,
-            'nama_supplier' => $this->nama_supplier,
-            'kategori_supplier' => $this->kategori_supplier,
-            'negara' => $this->negara,
-            'nomer_telepon_kantor' => $this->nomer_telepon_kantor,
-            'email_kantor' => $this->email_kantor,
-            'website' => $this->website,
-            'npwp' => $this->npwp,
+            'nama_pengrajin' => $this->nama_pengrajin,
+            'nomer_wa' => $this->nomer_wa,
             'alamat' => $this->alamat,
             'tentang' => $this->tentang,
         ];
@@ -100,7 +56,7 @@ class Register extends Component
         try {
             $client = new Client(['base_uri' => env('API_URL')]);
 
-            $res = $client->post('/api/super-admin/manage/supplier/add', [
+            $res = $client->post('/api/super-admin/manage/pengrajin/add', [
                 'headers' => [
                     'Accept' => 'application/json',
                     'Authorization' => 'Bearer ' . session('auth_data.token')
@@ -110,7 +66,69 @@ class Register extends Component
 
             $responseData = json_decode($res->getBody()->getContents(), true);
 
-            session()->flash('success_message', $responseData['data']['nama_supplier'] . ' berhasil ditambahkan');
+            session()->flash('success_message', $responseData['data']['nama_pengrajin'] . ' berhasil ditambahkan');
+
+            $this->redirectRoute('appSupplierIndexPage', navigate: true);
+        } catch (RequestException $e) {
+            if ($e->hasResponse()) {
+                $response = $e->getResponse();
+                $body = json_decode($response->getBody()->getContents());
+
+                if ($response->getStatusCode() == 422) {
+
+                    session()->flash('error_message', $body->message);
+                    // $this->redirectRoute('accountInfoPage');
+                    return;
+                } else {
+                    dd($body);
+                }
+            }
+            throw $e;
+        }
+    }
+
+    public function downloadTemplate()
+    {
+        $path = public_path('assets/template_files/templateImportPengrajin.xlsx');
+
+        return response()->streamDownload(function () use ($path) {
+            readfile($path);
+        }, 'templateImportPengrajin.xlsx');
+    }
+
+    public function uploadFile()
+    {
+
+        $file = $this->excel_file;
+
+        $this->validate([
+            'excel_file' => 'required|file|mimes:xlsx,xls'
+        ]);
+
+
+        $filePath = $file->getRealPath();
+        $fileName = $file->getClientOriginalName();
+
+        try {
+            $client = new Client(['base_uri' => env('API_URL')]);
+
+            $res = $client->post('/api/super-admin/manage/pengrajin/bulk-add-new', [
+                'headers' => [
+                    'Accept' => 'application/json',
+                    'Authorization' => 'Bearer ' . session('auth_data.token')
+                ],
+                'multipart' => [
+                    [
+                        'name'     => 'excel_file',
+                        'filename' => $fileName,
+                        'Mime-Type' => $file->getMimeType(),
+                        'contents' => fopen($filePath, 'r'),
+                    ]
+                ]
+            ]);
+
+            $responseData = json_decode($res->getBody()->getContents(), true);
+            session()->flash('success_message', $responseData['message']);
 
             $this->redirectRoute('appSupplierIndexPage', navigate: true);
         } catch (RequestException $e) {

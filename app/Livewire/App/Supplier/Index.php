@@ -15,7 +15,7 @@ class Index extends Component
     use RequireLogin;
 
     #[Layout('components.layouts.applayout')]
-    #[Title('Supplier Master Data')]
+    #[Title('Pengrajin Master Data')]
 
     public $recentlyAddSuppliers;
     public $countSupplier;
@@ -30,16 +30,16 @@ class Index extends Component
         try {
             $client = new Client(['base_uri' => env('API_URL')]);
 
-            $res1 = $client->get('/api/super-admin/manage/supplier/count/all', [
+            $res1 = $client->get('/api/count/pengrajin/count-all', [
                 'headers' => [
                     'Accept' => 'application/json',
                     'Authorization' => 'Bearer ' . session('auth_data.token')
                 ],
             ]);
 
-            $this->countSupplier = json_decode($res1->getBody()->getContents(), true)['total_suppliers'];
+            $this->countSupplier = json_decode($res1->getBody()->getContents(), true)['total_pengrajin'];
 
-            $res2 = $client->get('/api/super-admin/manage/get-all-recently-added-suppliers', [
+            $res2 = $client->get('/api/super-admin/manage/get-all-recently-added-pengrajin', [
                 'headers' => [
                     'Accept' => 'application/json',
                     'Authorization' => 'Bearer ' . session('auth_data.token')
@@ -49,7 +49,7 @@ class Index extends Component
             $this->recentlyAddSuppliers = collect(json_decode($res2->getBody()->getContents(), true))->map(function ($item) {
                 return [
                     'id'=>$item['id'],
-                    'nama_supplier' => $item['nama_supplier'],
+                    'nama_pengrajin' => $item['nama_pengrajin'],
                     'created_at' => IndoDateFormat::formatIndo($item['created_at'])
                 ];
             })->toArray();

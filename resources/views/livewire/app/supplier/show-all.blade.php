@@ -6,12 +6,12 @@
     <main id="main" class="main">
 
         <div class="pagetitle">
-            <h1>Master Data Supplier</h1>
+            <h1>Master Data Pengrajin</h1>
             <nav>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="{{route('appDashboardPage')}}">Home</a></li>
-                    <li class="breadcrumb-item">Supplier Master</li>
-                    <li class="breadcrumb-item active">All Supplier</li>
+                    <li class="breadcrumb-item">Pengrajin Master</li>
+                    <li class="breadcrumb-item active">All Pengrajin</li>
                 </ol>
             </nav>
         </div><!-- End Page Title -->
@@ -34,8 +34,8 @@
                 <div class="col">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">Semua Supplier</h5>
-                            <p>Menampilkan daftar supplier yang ada dalam sistem.</p>
+                            <h5 class="card-title">Semua Pengrajin</h5>
+                            <p>Menampilkan daftar pengrajin yang ada dalam sistem.</p>
 
                             <hr>
 
@@ -44,8 +44,6 @@
                                     <tr>
                                         <th scope="col">Nama Supplier</th>
                                         <th scope="col">Nomer Telepon</th>
-                                        <th scope="col">Email</th>
-                                        <th scope="col">Kategori</th>
                                         <th scope="col">Tanggal Bergabung</th>
                                         <th scope="col">Aksi</th>
                                     </tr>
@@ -54,10 +52,8 @@
                                 <tbody>
                                     @foreach ($supplierList as $index => $supplier)
                                     <tr>
-                                        <td>{{$supplier['nama_supplier']}}</td>
-                                        <td>+62{{$supplier['nomer_telepon_kantor']}}</td>
-                                        <td>{{$supplier['email_kantor']}}</td>
-                                        <td>{{$supplier['category']['nama_kategori']}}</td>
+                                        <td>{{$supplier['nama_pengrajin']}}</td>
+                                        <td>+62{{$supplier['nomer_wa']}}</td>
                                         <td>{{substr($supplier['created_at'], 0, 10)}}</td>
                                         <td><a wire:navigate href="{{ route('appSupplierDetailPage', ['supplierId' => $supplier['id']]) }}" class="btn btn-info btn-sm"><i class="bi bi-eye"></i> Detail</a></td>
                                     </tr>

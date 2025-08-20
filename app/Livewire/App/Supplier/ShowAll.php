@@ -14,7 +14,7 @@ class ShowAll extends Component
     use RequireLogin;
 
     #[Layout('components.layouts.applayout')]
-    #[Title('All Supplier')]
+    #[Title('All Pengrajin')]
 
     public $supplierList;
 
@@ -27,7 +27,7 @@ class ShowAll extends Component
         try {
             $client = new Client(['base_uri' => env('API_URL')]);
 
-            $res1 = $client->get('/api/super-admin/manage/get-all-suppliers', [
+            $res1 = $client->get('/api/super-admin/manage/get-all-pengrajin', [
                 'headers' => [
                     'Accept' => 'application/json',
                     'Authorization' => 'Bearer ' . session('auth_data.token')

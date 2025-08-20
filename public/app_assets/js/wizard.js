@@ -119,23 +119,17 @@
     function populateSummary() {
         const namaSupplier = document.getElementById("namaSupplier")?.value;
         const nomerWa = document.getElementById("nomerWa")?.value;
-        const email = document.getElementById("email")?.value;
+
         const alamat = document.getElementById("alamat")?.value;
         const tentang = document.getElementById("tentang")?.value;
 
-        const akunSupplier = document.getElementById("floatingSelectAkun");
-        const kategoriSupplier = document.getElementById("floatingSelectKategori");
-
-        const akunText = akunSupplier?.options[akunSupplier.selectedIndex]?.text || "-";
-        const kategoriText = kategoriSupplier?.options[kategoriSupplier.selectedIndex]?.text || "-";
-
-        document.getElementById("summaryNamaSupplier").textContent = namaSupplier || "-";
-        document.getElementById("summaryNomerWa").textContent = nomerWa ? `+62${nomerWa}` : "-";
-        document.getElementById("summaryEmail").textContent = email || "-";
+        document.getElementById("summaryNamaSupplier").textContent =
+            namaSupplier || "-";
+        document.getElementById("summaryNomerWa").textContent = nomerWa
+            ? `+62${nomerWa}`
+            : "-";
         document.getElementById("summaryAlamat").textContent = alamat || "-";
         document.getElementById("summaryTentang").textContent = tentang || "-";
-        document.getElementById("summaryAkunSupplier").textContent = akunText;
-        document.getElementById("summaryKategoriSupplier").textContent = kategoriText;
     }
 
     nextBtn.addEventListener("click", () => {

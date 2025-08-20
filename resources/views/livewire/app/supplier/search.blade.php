@@ -10,7 +10,7 @@
             <nav>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="{{route('appDashboardPage')}}">Home</a></li>
-                    <li class="breadcrumb-item">Supplier Master</li>
+                    <li class="breadcrumb-item">Pengrajin Master</li>
                     <li class="breadcrumb-item active">Search</li>
                 </ol>
             </nav>
@@ -30,9 +30,8 @@
                             <table class="table datatable">
                                 <thead>
                                     <tr>
-                                        <th scope="col">Nama Supplier</th>
+                                        <th scope="col">Nama Pengrajin</th>
                                         <th scope="col">Nomer Telepon</th>
-                                        <th scope="col">Email</th>
                                         <th scope="col">Aksi</th>
                                     </tr>
                                 </thead>
@@ -40,9 +39,8 @@
                                 <tbody>
                                     @foreach ($supplierList as $index => $supplier)
                                     <tr>
-                                        <td>{{$supplier['nama_supplier']}}</td>
-                                        <td>+62{{$supplier['nomer_telepon_kantor']}}</td>
-                                        <td>{{$supplier['email_kantor']}}</td>
+                                        <td>{{$supplier['nama_pengrajin']}}</td>
+                                        <td>+62{{$supplier['nomer_wa']}}</td>
                                         <td><a wire:navigate href="{{ route('appSupplierDetailPage', ['supplierId' => $supplier['id']]) }}" class="btn btn-info btn-sm"><i class="bi bi-eye"></i> Detail</a></td>
                                     </tr>
                                     @endforeach

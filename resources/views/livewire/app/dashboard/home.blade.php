@@ -33,14 +33,14 @@
                         <div class="card info-card sales-card">
 
                             <div class="card-body">
-                                <h5 class="card-title">Barang Masuk <span>| Hari ini</span></h5>
+                                <h5 class="card-title">Pengembalian <span>| Hari ini</span></h5>
 
                                 <div class="d-flex align-items-center">
                                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
                                         <i class="ri ri-arrow-right-down-fill"></i>
                                     </div>
                                     <div class="ps-3">
-                                        <h6>{{$barangKeluarMasukToday['barang_masuk']}}</h6>
+                                        <h6>{{$ambilKembaliToday['kembali']??'X'}}</h6>
 
                                     </div>
                                 </div>
@@ -54,14 +54,14 @@
                         <div class="card info-card revenue-card">
 
                             <div class="card-body">
-                                <h5 class="card-title">Barang Keluar <span>| Hari ini</span></h5>
+                                <h5 class="card-title">Pengambilan <span>| Hari ini</span></h5>
 
                                 <div class="d-flex align-items-center">
                                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
                                         <i class="ri ri-arrow-left-up-fill"></i>
                                     </div>
                                     <div class="ps-3">
-                                        <h6>{{$barangKeluarMasukToday['barang_keluar']}}</h6>
+                                        <h6>{{$ambilKembaliToday['ambil']??'X'}}</h6>
 
                                     </div>
                                 </div>
@@ -76,7 +76,7 @@
                         <div class="card info-card customers-card">
 
                             <div class="card-body">
-                                <h5 class="card-title">Total Supplier</h5>
+                                <h5 class="card-title">Total Pengrajin</h5>
 
                                 <div class="d-flex align-items-center">
                                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
@@ -84,7 +84,7 @@
                                     </div>
                                     <div class="ps-3">
                                         <h6>{{$countSupplier}}</h6>
-                                        <span class="text-muted small pt-2 ps-1">Supplier</span>
+                                        <span class="text-muted small pt-2 ps-1">Pengrajin</span>
 
                                     </div>
                                 </div>
@@ -101,7 +101,7 @@
                         <div class="card info-card customers-card">
                             <a href="{{route('appSupplierSearchByBarcodePage')}}">
                                 <div class="card-body">
-                                    <h5 class="card-title text-center">Cari Supplier</h5>
+                                    <h5 class="card-title text-center">Cari Pengrajin</h5>
 
                                     <div class="d-flex align-items-center justify-content-center">
                                         <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
@@ -124,7 +124,7 @@
                         <div class="card info-card sales-card">
                             <a href="{{route('appItemInPage')}}">
                                 <div class="card-body">
-                                    <h5 class="card-title text-center">Input Barang Masuk</h5>
+                                    <h5 class="card-title text-center">Input Pengembalian</h5>
 
                                     <div class="d-flex align-items-center justify-content-center">
                                         <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
@@ -141,7 +141,7 @@
                         <div class="card info-card revenue-card">
                             <a href="{{route('appItemOutPage')}}">
                                 <div class="card-body">
-                                    <h5 class="card-title text-center">Input Barang Keluar</h5>
+                                    <h5 class="card-title text-center">Input Pengambilan</h5>
 
                                     <div class="d-flex align-items-center justify-content-center">
                                         <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
@@ -157,7 +157,7 @@
                         <div class="card info-card">
                             <a href="{{route('appPantauStokPage')}}">
                                 <div class="card-body">
-                                    <h5 class="card-title text-center">Stok Barang</h5>
+                                    <h5 class="card-title text-center">Lihat Statistik</h5>
 
                                     <div class="d-flex align-items-center justify-content-center">
                                         <div class="bg-info card-icon rounded-circle d-flex align-items-center justify-content-center">
@@ -165,7 +165,7 @@
                                         </div>
                                         <div class="ps-3">
                                             <h6>Statistik</h6>
-                                            <span class="text-muted pt-2">Stok</span>
+                                            <span class="text-muted pt-2">Ambil/Kembali</span>
 
                                         </div>
                                     </div>
@@ -185,7 +185,7 @@
                     <div class="card">
 
                         <div class="card-body">
-                            <h5 class="card-title">Laporan Barang<span> | 7 hari terakhir</span><br><span>{{$reportRange}}</span>
+                            <h5 class="card-title">Laporan<span> | 7 hari terakhir</span><br><span>{{$reportRange}}</span>
                             </h5>
 
                             <!-- Line Chart -->
@@ -195,17 +195,17 @@
                                 document.addEventListener("DOMContentLoaded", () => {
                                     const categories = {!! $chart_cat !!};
 
-                                    const barangMasuk = {!! $chart_bm !!};
-                                    const barangKeluar = {!! $chart_bk !!};
+                                    const kembali = {!! $chart_k !!};
+                                    const ambil = {!! $chart_a !!};
 
                                     new ApexCharts(document.querySelector("#reportsChart"), {
                                         series: [{
-                                                name: 'Barang Masuk',
-                                                data: barangMasuk
+                                                name: 'Pengembalian',
+                                                data: kembali
                                             },
                                             {
-                                                name: 'Barang Keluar',
-                                                data: barangKeluar
+                                                name: 'Pengambilan',
+                                                data: ambil
                                             },
                                         ],
                                         chart: {

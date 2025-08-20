@@ -74,72 +74,9 @@
                     </div>
                 </div>
 
-                <div class="col-lg-4">
-
-                    <div class="card info-card sales-card">
-
-                        <div class="card-body">
-                            <h5 class="card-title">Barang Hampir Habis</h5>
-
-                            <div class="row">
-                                <div class="col">
-                                    <div class="d-flex align-items-center">
-                                        <div
-                                            class="card-icon rounded-circle d-flex align-items-center justify-content-center bg-danger text-white">
-                                            <i class="bx bx-error"></i>
-                                        </div>
-                                        <div class="ps-3">
-                                            <h6>{{$lowStokItemCount}}</h6>
-                                            <span class="text-muted small pt-2 ps-1">Item</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="d-flex align-items-center">
-
-                                        <a wire:navigate href="{{route('appLowStokPage')}}" class="btn btn-warning"><i class="bi bi-border-bottom me-1"></i>Cek Stok</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                
             </div>
 
-            <div class="row">
-                <div class="col-lg-6">
-
-                    <div class="card info-card sales-card">
-                        <a href="{{route('appItemInPage')}}">
-                            <div class="card-body">
-                                <h5 class="card-title text-center">Input Barang Masuk</h5>
-
-                                <div class="d-flex align-items-center justify-content-center">
-                                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                        <i class="ri ri-arrow-right-down-fill"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-
-                    <div class="card info-card revenue-card">
-                        <a href="{{route('appItemOutPage')}}">
-                            <div class="card-body">
-                                <h5 class="card-title text-center">Input Barang Keluar</h5>
-
-                                <div class="d-flex align-items-center justify-content-center">
-                                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                        <i class="ri ri-arrow-left-up-fill"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </div>
         </section>
 
         <section class="section">

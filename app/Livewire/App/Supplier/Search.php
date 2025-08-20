@@ -14,7 +14,7 @@ class Search extends Component
     use RequireLogin;
 
     #[Layout('components.layouts.applayout')]
-    #[Title('Search Supplier')]
+    #[Title('Search Pengrajin')]
 
     public $supplierList;
     public $searchQuery;
@@ -29,7 +29,7 @@ class Search extends Component
         try {
             $client = new Client(['base_uri' => env('API_URL')]);
 
-            $res1 = $client->get('/api/super-admin/manage/supplier/search/'.$query, [
+            $res1 = $client->get('/api/super-admin/manage/pengrajin/search/'.$query, [
                 'headers' => [
                     'Accept' => 'application/json',
                     'Authorization' => 'Bearer ' . session('auth_data.token')

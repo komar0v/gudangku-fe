@@ -18,10 +18,10 @@ class Home extends Component
     public $accountData, $chartData;
     public $countSupplier;
 
-    public $chart_cat, $chart_bm, $chart_bk;
+    public $chart_cat, $chart_k, $chart_a;
 
     public $reportRange;
-    public $barangKeluarMasukToday;
+    public $ambilKembaliToday;
 
     public function mount()
     {
@@ -47,27 +47,27 @@ class Home extends Component
             $this->chartData = json_decode($res1->getBody()->getContents(), true);
 
             $this->chart_cat = json_encode(collect($this->chartData)->pluck('tanggal'), true);
-            $this->chart_bm = json_encode(collect($this->chartData)->pluck('barang_masuk'), true);
-            $this->chart_bk = json_encode(collect($this->chartData)->pluck('barang_keluar'), true);
+            $this->chart_k = json_encode(collect($this->chartData)->pluck('kembali'), true);
+            $this->chart_a = json_encode(collect($this->chartData)->pluck('ambil'), true);
 
-            $res2 = $client->get('/api/super-admin/manage/supplier/count/all', [
+            $res2 = $client->get('/api/count/pengrajin/count-all', [
                 'headers' => [
                     'Accept' => 'application/json',
                     'Authorization' => 'Bearer ' . session('auth_data.token')
                 ],
             ]);
 
-            $this->countSupplier = json_decode($res2->getBody()->getContents(), true)['total_suppliers'];
+            $this->countSupplier = json_decode($res2->getBody()->getContents(), true)['total_pengrajin'];
 
             $today = now('Asia/Jakarta')->format('Y-m-d');
-            $res3 = $client->get('/api/super-admin/statistics/income-outcome-items/'.$today, [
+            $res3 = $client->get('/api/count/transactions/on-a-day/'.$today, [
                 'headers' => [
                     'Accept' => 'application/json',
                     'Authorization' => 'Bearer ' . session('auth_data.token')
                 ],
             ]);
 
-            $this->barangKeluarMasukToday = json_decode($res3->getBody()->getContents(), true);
+            $this->ambilKembaliToday = json_decode($res3->getBody()->getContents(), true);
         } catch (RequestException $e) {
             if ($e->hasResponse()) {
                 $response = $e->getResponse();

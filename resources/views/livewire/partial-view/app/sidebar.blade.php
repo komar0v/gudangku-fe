@@ -21,14 +21,14 @@
             <li class="nav-item">
                 <a wire:navigate class="nav-link {{ request()->routeIs('appSupplierEditDataPage')||request()->routeIs('appSupplierIndexPage')||request()->routeIs('appRegisterSupplierPage')||request()->routeIs('appShowAllSupplierPage')||request()->routeIs('appSupplierDetailPage') ? '' : 'collapsed' }}" href="{{route('appSupplierIndexPage')}}">
                     <i class="bi bi-people"></i>
-                    <span>Supplier Master</span>
+                    <span>Pengrajin Master</span>
                 </a>
             </li>
 
             <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('appLowStokPage')||request()->routeIs('appAllStokPage')||request()->routeIs('appPantauStokPage') ? '' : 'collapsed' }}" href="{{route('appPantauStokPage')}}">
                     <i class="bi bi-file-earmark-bar-graph"></i>
-                    <span>Statistik Stok</span>
+                    <span>Statistik</span>
                 </a>
             </li>
 

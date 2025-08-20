@@ -17,7 +17,7 @@ class Index extends Component
     #[Title('Inventory Master Data')]
 
     public $categoryList, $satuanBarangList;
-    public $itemCount, $lowStokItemCount;
+    public $itemCount;
 
     public function mount()
     {
@@ -46,7 +46,7 @@ class Index extends Component
 
             $this->satuanBarangList = json_decode($res2->getBody()->getContents(), true)['data'];
 
-            $res3 = $client->get('/api/super-admin/manage/inventory/count/all', [
+            $res3 = $client->get('/api/count/inventory/count-all', [
                 'headers' => [
                     'Accept' => 'application/json',
                     'Authorization' => 'Bearer ' . session('auth_data.token')
@@ -55,14 +55,6 @@ class Index extends Component
 
             $this->itemCount = json_decode($res3->getBody()->getContents(), true)['total_items'];
 
-            $res4 = $client->get('/api/super-admin/manage/inventory/item/get-hampir-habis', [
-                'headers' => [
-                    'Accept' => 'application/json',
-                    'Authorization' => 'Bearer ' . session('auth_data.token')
-                ],
-            ]);
-
-            $this->lowStokItemCount = count(json_decode($res4->getBody()->getContents(), true));
         } catch (RequestException $e) {
             if ($e->hasResponse()) {
                 $response = $e->getResponse();
