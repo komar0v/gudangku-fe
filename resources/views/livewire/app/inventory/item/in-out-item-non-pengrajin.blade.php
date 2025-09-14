@@ -49,7 +49,7 @@
                                 <div class="profile-card d-flex flex-column align-items-center">
                                     <div class="col-12">
                                         <label for="type" class="form-label">Jenis</label>
-                                        <select wire:model="type" id="type" class="form-control">
+                                        <select wire:model="type" id="type" class="form-control form-control-lg">
                                             <option value="">-- Pilih Jenis --</option>
                                             <option value="in">Barang Masuk</option>
                                             <option value="out">Barang Keluar</option>

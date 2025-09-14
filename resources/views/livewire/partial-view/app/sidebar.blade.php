@@ -33,7 +33,7 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('appGraphReportPage')||request()->routeIs('appReportPage') ? '' : 'collapsed' }}" wire:navigate href="{{route('appReportPage')}}">
+                <a class="nav-link {{ request()->routeIs('appGraphReportPage')||request()->routeIs('appReportPage') ? '' : 'collapsed' }}" href="{{route('appReportPage')}}">
                     <i class="bi bi-graph-up"></i>
                     <span>Laporan</span>
                 </a>
