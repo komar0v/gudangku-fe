@@ -15,10 +15,10 @@ class Details extends Component
     use RequireLogin;
 
     #[Layout('components.layouts.applayout')]
-    #[Title('Show All Items')]
+    #[Title('Item Details')]
 
     public $itemData;
-    public $nama_barang, $kategori_id, $satuan_id, $created_at, $updated_at;
+    public $nama_barang, $kategori_id, $satuan_id, $created_at, $updated_at, $harga;
     public $categoryList, $satuanList;
 
     public function mount($itemId)
@@ -39,6 +39,7 @@ class Details extends Component
 
             $this->itemData = json_decode($res1->getBody()->getContents(), true);
             $this->nama_barang = $this->itemData['nama_barang'];
+            $this->harga = $this->itemData['harga'];
             $this->kategori_id = $this->itemData['kategori']['id'];
             $this->satuan_id = $this->itemData['satuan']['id'];
 
@@ -91,6 +92,7 @@ class Details extends Component
             'nama_barang' => 'required',
             'kategori_id' => 'required',
             'satuan_id' => 'required',
+            'harga'=> 'required|numeric',
         ];
     }
 
@@ -101,7 +103,8 @@ class Details extends Component
         $data = [
             'nama_barang' => $this->nama_barang,
             'kategori_id' => $this->kategori_id,
-            'satuan_id' => $this->satuan_id
+            'satuan_id' => $this->satuan_id,
+            'harga'=>preg_replace('/[^0-9]/', '', $this->harga)
         ];
 
         try {

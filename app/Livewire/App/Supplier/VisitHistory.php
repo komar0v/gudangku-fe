@@ -30,7 +30,7 @@ class VisitHistory extends Component
         try {
             $client = new Client(['base_uri' => env('API_URL')]);
 
-            $res1 = $client->get('/api/super-admin/manage/supplier/'.$supplierId.'/get-supplier-full-visit-log', [
+            $res1 = $client->get('/api/super-admin/statistics/pengrajin/' . $supplierId . '/get-full-history', [
                 'headers' => [
                     'Accept' => 'application/json',
                     'Authorization' => 'Bearer ' . session('auth_data.token')
@@ -55,7 +55,7 @@ class VisitHistory extends Component
             throw $e;
         }
     }
-    
+
     public function render()
     {
         return view('livewire.app.supplier.visit-history');

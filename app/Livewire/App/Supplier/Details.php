@@ -30,14 +30,14 @@ class Details extends Component
         try {
             $client = new Client(['base_uri' => env('API_URL')]);
 
-            $res1 = $client->get('/api/super-admin/manage/supplier/details/' . $supplierId, [
+            $res1 = $client->get('/api/super-admin/manage/pengrajin/details/' . $supplierId, [
                 'headers' => [
                     'Accept' => 'application/json',
                     'Authorization' => 'Bearer ' . session('auth_data.token')
                 ],
             ]);
 
-            $res2 = $client->get('/api/super-admin/manage/supplier/' . $supplierId . '/get-supplier-visit-log', [
+            $res2 = $client->get('api/super-admin/statistics/pengrajin/' . $supplierId . '/get-visit-log-on-month/' . now()->format('m-Y'), [
                 'headers' => [
                     'Accept' => 'application/json',
                     'Authorization' => 'Bearer ' . session('auth_data.token')
@@ -51,11 +51,16 @@ class Details extends Component
 
             $this->supplierVisitLog = json_decode($res2->getBody()->getContents(), true);
 
-            $this->last_visit = isset($this->supplierVisitLog['last_visit']) && $this->supplierVisitLog['last_visit']
-                ? IndoDateFormat::formatIndo($this->supplierVisitLog['last_visit'])
-                : null;
+            $this->count_visit_log = count($this->supplierVisitLog) ?? 0;
 
-            $this->count_visit_log = $this->supplierVisitLog['visit_count_on_this_month'] ?? 0;
+            $res3 = $client->get('api/super-admin/statistics/pengrajin/' . $supplierId . '/get-last-visit', [
+                'headers' => [
+                    'Accept' => 'application/json',
+                    'Authorization' => 'Bearer ' . session('auth_data.token')
+                ],
+            ]);
+
+            $this->last_visit = json_decode($res3->getBody()->getContents(), true)['last_visit'] ?? null;
         } catch (RequestException $e) {
             if ($e->hasResponse()) {
                 $response = $e->getResponse();
@@ -81,7 +86,7 @@ class Details extends Component
 
     public function downloadBarcode()
     {
-        $filename = 'qr' . preg_replace('/[^a-zA-Z0-9_-]/', '_', $this->supplierData['nama_supplier']) . '.png';
+        $filename = 'qr' . preg_replace('/[^a-zA-Z0-9_-]/', '_', $this->supplierData['nama_pengrajin']) . '.png';
 
         $imageData = base64_decode($this->QRbarcode);
         $tempPath = storage_path('app/temp_barcode_' . uniqid() . '.png');

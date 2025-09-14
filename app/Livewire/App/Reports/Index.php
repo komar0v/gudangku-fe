@@ -18,8 +18,9 @@ class Index extends Component
     #[Layout('components.layouts.applayout')]
     #[Title('Reports')]
 
-    public $date;
+    public $dateBulanan, $dateHarian;
     public $inventoryReportData;
+    public $subject;
 
     public function mount()
     {
@@ -28,28 +29,23 @@ class Index extends Component
         }
     }
 
-    public function rules()
+    public function cetakLaporanInvBulanan()
     {
-        return [
-            'date' => 'required'
-        ];
-    }
-
-    public function cetakLaporan()
-    {
-        $this->validate();
+        $this->validate([
+            'dateBulanan' => 'required'
+        ]);
 
         try {
             $client = new Client(['base_uri' => env('API_URL')]);
 
-            $res1 = $client->get('/api/super-admin/statistics/inventory/reports/' . $this->date, [
+            $res1 = $client->get('/api/reports/inventory/monthly/' . $this->dateBulanan, [
                 'headers' => [
                     'Accept' => 'application/json',
                     'Authorization' => 'Bearer ' . session('auth_data.token')
                 ],
             ]);
 
-            $this->inventoryReportData = json_decode($res1->getBody()->getContents(), true)['data'];
+            $this->inventoryReportData = json_decode($res1->getBody()->getContents(), true);
         } catch (RequestException $e) {
             if ($e->hasResponse()) {
                 $response = $e->getResponse();
@@ -60,6 +56,9 @@ class Index extends Component
                     session()->flash('error_message', 'Forbidden.');
                     $this->redirectRoute('appDashboardPage');
                     return;
+                } else if ($response->getStatusCode() == 422) {
+                    session()->flash('error_message', $body->message);
+                    return;
                 } else {
                     dd($body);
                 }
@@ -67,12 +66,13 @@ class Index extends Component
             throw $e;
         }
 
-        $periode = IndoDateFormat::formatIndo($this->date);
+        $periode = IndoDateFormat::formatIndo($this->dateBulanan);
         $parts = explode(' ', $periode);
         $substrPeriode = $parts[1] . ' ' . $parts[2];
 
         $data = [
             'periode' => $substrPeriode,
+            'subject' => 'Laporan Inventory Bulanan',
             'namaAdmin' => session('auth_data.accountdata.fullname'),
             'printedOn' => now('Asia/Jakarta')->toDateTimeString(),
             'inventoryReportData' => $this->inventoryReportData
@@ -83,10 +83,10 @@ class Index extends Component
         $stream_PDF = PDF::loadView('livewire/app/reports/laporanInventory', $data)->setPaper('A4', 'portrait');
         return response()->streamDownload(function () use ($stream_PDF) {
             echo $stream_PDF->stream();
-        }, 'laporanInventory_' . $this->date . '.pdf');
+        }, 'laporanArusBarang_' . $this->dateBulanan . '.pdf');
     }
 
-    public function showGraph()
+    public function showInvGraphMonthly()
     {
         $this->validate();
         $this->redirectRoute('appGraphReportPage', ['date' => $this->date]);
@@ -95,5 +95,59 @@ class Index extends Component
     public function render()
     {
         return view('livewire.app.reports.index');
+    }
+
+    public function cetakLaporanInvHarian()
+    {
+        $this->validate([
+            'dateHarian' => 'required'
+        ]);
+
+        try {
+            $client = new Client(['base_uri' => env('API_URL')]);
+
+            $res1 = $client->get('/api/reports/inventory/daily/' . $this->dateHarian, [
+                'headers' => [
+                    'Accept' => 'application/json',
+                    'Authorization' => 'Bearer ' . session('auth_data.token')
+                ],
+            ]);
+
+            $this->inventoryReportData = json_decode($res1->getBody()->getContents(), true);
+        } catch (RequestException $e) {
+            if ($e->hasResponse()) {
+                $response = $e->getResponse();
+                $body = json_decode($response->getBody()->getContents());
+
+                if ($response->getStatusCode() == 403) {
+                    //Forbidden
+                    session()->flash('error_message', 'Forbidden.');
+                    $this->redirectRoute('appDashboardPage');
+                    return;
+                } else if ($response->getStatusCode() == 422) {
+                    session()->flash('error_message', $body->message);
+                    return;
+                } else {
+                    dd($body);
+                }
+            }
+            throw $e;
+        }
+
+        $periode = explode(' ', IndoDateFormat::formatIndo($this->dateHarian));
+        $periode = $periode[0] . ' ' . $periode[1] . ' ' . $periode[2];
+
+        $data = [
+            'periode' => $periode,
+            'subject' => 'Laporan Inventory Harian',
+            'namaAdmin' => session('auth_data.accountdata.fullname'),
+            'printedOn' => now('Asia/Jakarta')->toDateTimeString(),
+            'inventoryReportData' => $this->inventoryReportData
+        ];
+
+        $stream_PDF = PDF::loadView('livewire/app/reports/laporanInventory', $data)->setPaper('A4', 'portrait');
+        return response()->streamDownload(function () use ($stream_PDF) {
+            echo $stream_PDF->stream();
+        }, 'laporanArusBarang_' . $this->dateHarian . '.pdf');
     }
 }

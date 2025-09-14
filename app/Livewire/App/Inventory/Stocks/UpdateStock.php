@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Livewire\App\Inventory\Transactions;
+namespace App\Livewire\App\Inventory\Stocks;
 
+use Carbon\Carbon;
 use GuzzleHttp\Client;
 use Livewire\Component;
 use Livewire\Attributes\Title;
@@ -9,36 +10,55 @@ use Livewire\Attributes\Layout;
 use App\Livewire\Traits\RequireLogin;
 use GuzzleHttp\Exception\RequestException;
 
-class ItemOutcome extends Component
+class UpdateStock extends Component
 {
     use RequireLogin;
 
     #[Layout('components.layouts.applayout')]
-    #[Title('Item Income Stock')]
+    #[Title('Update Stock')]
 
-    public $listItems;
-    public $item_id, $jumlah, $berat_total, $keterangan;
-    public $stokData;
-
+    public $stockData, $itemData, $stockLogsData;
+    public $stock_quantity, $stock_operation = 'set', $bulanIni;
+    public $itemId;
     public $successMessage;
-    public $errorMessage;
 
-    public function mount()
+    public function mount($itemId)
     {
         if (! $this->ensureAuthenticated()) {
             return;
         }
 
+        $this->itemId = $itemId;
+
+        $this->bulanIni = Carbon::parse(now())->translatedFormat('F Y');
+
+        $this->fetchStock();
+    }
+
+    public function fetchStock()
+    {
         try {
             $client = new Client(['base_uri' => env('API_URL')]);
 
-            $res2 = $client->get('/api/super-admin/manage/inventory/item/get-all-lite', [
+            $res1 = $client->get('/api/super-admin/manage/stocks/' . $this->itemId . '/details', [
                 'headers' => [
                     'Accept' => 'application/json',
                     'Authorization' => 'Bearer ' . session('auth_data.token')
                 ],
             ]);
-            $this->listItems = json_decode($res2->getBody()->getContents(), true)['data'];
+
+            $this->stockData = json_decode($res1->getBody()->getContents(), true);
+
+            $res2 = $client->get('/api/super-admin/manage/inventory/item/' . $this->itemId . '/detail', [
+                'headers' => [
+                    'Accept' => 'application/json',
+                    'Authorization' => 'Bearer ' . session('auth_data.token')
+                ],
+            ]);
+
+            $this->itemData = json_decode($res2->getBody()->getContents(), true);
+
+            $this->fetchStokLogs();
         } catch (RequestException $e) {
             if ($e->hasResponse()) {
                 $response = $e->getResponse();
@@ -57,31 +77,29 @@ class ItemOutcome extends Component
         }
     }
 
+
     public function rules()
     {
         return [
-            'item_id' => 'required',
-            'jumlah' => 'required|integer',
-            'berat_total' => 'required|numeric',
-            'keterangan' => 'nullable',
+            'stock_quantity' => 'required|numeric',
         ];
     }
 
-    public function saveBarangKeluar()
+    public function updateStock()
     {
         $this->validate();
 
         $data = [
-            'item_id' => $this->item_id,
-            'jumlah' => $this->jumlah,
-            'berat_total' => $this->berat_total,
-            'keterangan' => $this->keterangan,
+            'item_id' => $this->itemData['id'],
+            'quantity' => $this->stock_quantity,
+            'operation' => $this->stock_operation,
         ];
+
 
         try {
             $client = new Client(['base_uri' => env('API_URL')]);
 
-            $res = $client->post('/api/super-admin/transactions/inventory/outcoming-item', [
+            $res = $client->post('/api/super-admin/manage/stocks/update-stock', [
                 'headers' => [
                     'Accept' => 'application/json',
                     'Authorization' => 'Bearer ' . session('auth_data.token')
@@ -89,21 +107,17 @@ class ItemOutcome extends Component
                 'json' => $data
             ]);
 
-            $resbody = json_decode($res->getBody()->getContents(), true);
+            $responseData = json_decode($res->getBody()->getContents(), true);
 
-            $this->successMessage = $resbody['message'];
-
-            // Kirim event ke browser
-            $this->dispatch('success-message');
-            $this->cekStok($this->item_id);
+            $this->successMessage = $responseData['message'];
         } catch (RequestException $e) {
             if ($e->hasResponse()) {
                 $response = $e->getResponse();
-                $body = json_decode($response->getBody()->getContents(), true);
+                $body = json_decode($response->getBody()->getContents());
 
-                if ($response->getStatusCode() == 400) {
+                if ($response->getStatusCode() == 422) {
 
-                    $this->errorMessage = $body['message'];
+                    session()->flash('error_message', $body->message);
                     return;
                 } else {
                     dd($body);
@@ -113,18 +127,20 @@ class ItemOutcome extends Component
         }
     }
 
-    public function cekStok($itemId)
+    public function fetchStokLogs()
     {
         try {
             $client = new Client(['base_uri' => env('API_URL')]);
 
-            $res = $client->get('/api/super-admin/manage/inventory/item/cek-stok/' . $itemId, [
+            $date = now()->format('m-Y');
+            $res3 = $client->get('/api/super-admin/manage/stocks/'.$this->itemId.'/full-logs?month='.$date, [
                 'headers' => [
                     'Accept' => 'application/json',
                     'Authorization' => 'Bearer ' . session('auth_data.token')
                 ],
             ]);
-            $this->stokData = json_decode($res->getBody()->getContents(), true)['data'];
+
+            $this->stockLogsData = json_decode($res3->getBody()->getContents(), true);
         } catch (RequestException $e) {
             if ($e->hasResponse()) {
                 $response = $e->getResponse();
@@ -145,6 +161,6 @@ class ItemOutcome extends Component
 
     public function render()
     {
-        return view('livewire.app.inventory.transactions.item-outcome');
+        return view('livewire.app.inventory.stocks.update-stock');
     }
 }

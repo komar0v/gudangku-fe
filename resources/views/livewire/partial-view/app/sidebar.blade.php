@@ -12,7 +12,7 @@
 
             @if(session('auth_data.accountdata.role_code')=='RL_SA')
             <li class="nav-item">
-                <a wire:navigate class="nav-link {{ request()->routeIs('appItemDetailsPage')||request()->routeIs('appShowAllItemsPage')||request()->routeIs('appUnitDetailPage')||request()->routeIs('appUnitRegisterPage')||request()->routeIs('appCategoryDetailPage')||request()->routeIs('appCategoryRegisterPage')||request()->routeIs('appInventoryIndexPage') ? '' : 'collapsed' }}" href="{{route('appInventoryIndexPage')}}">
+                <a wire:navigate class="nav-link {{ request()->routeIs('appAddItemPage')||request()->routeIs('appItemDetailsPage')||request()->routeIs('appShowAllItemsPage')||request()->routeIs('appUnitDetailPage')||request()->routeIs('appUnitRegisterPage')||request()->routeIs('appCategoryDetailPage')||request()->routeIs('appCategoryRegisterPage')||request()->routeIs('appInventoryIndexPage') ? '' : 'collapsed' }}" href="{{route('appInventoryIndexPage')}}">
                     <i class="bx bxs-box"></i>
                     <span>Inventory Master</span>
                 </a>
@@ -26,7 +26,7 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('appLowStokPage')||request()->routeIs('appAllStokPage')||request()->routeIs('appPantauStokPage') ? '' : 'collapsed' }}" href="{{route('appPantauStokPage')}}">
+                <a class="nav-link {{ request()->routeIs('appStatsObserverPage') ? '' : 'collapsed' }}" href="{{route('appStatsObserverPage')}}">
                     <i class="bi bi-file-earmark-bar-graph"></i>
                     <span>Statistik</span>
                 </a>
@@ -48,6 +48,12 @@
             </li>
             @endif
 
+            <li class="nav-item">
+                <a wire:navigate class="nav-link {{ request()->routeIs('appCreateBlogPage')||request()->routeIs('appManageBlogsPage')||request()->routeIs('appSiteSettingsIndexPage')||request()->routeIs('appLandingPageFooterSettingsPage') ? '' : 'collapsed' }}" href="{{route('appSiteSettingsIndexPage')}}">
+                    <i class="bi bi-tools"></i>
+                    <span>Pengaturan Website</span>
+                </a>
+            </li>
         </ul>
 
     </aside><!-- End Sidebar-->

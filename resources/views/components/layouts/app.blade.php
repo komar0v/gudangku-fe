@@ -7,7 +7,7 @@
 
     <title>{{ $title ?? 'Page Title' }}</title>
     <!-- Favicons -->
-    <link href="{{ url(env('ASSET_URL') . 'assets/img/favicon.png') }}" rel="icon">
+    <link href="{{ url(env('ASSET_URL') . 'assets/img/favicon.ico') }}" rel="icon">
     <link href="{{ url(env('ASSET_URL') . 'assets/img/apple-touch-icon.png') }}" rel="apple-touch-icon">
 
     <!-- Fonts -->

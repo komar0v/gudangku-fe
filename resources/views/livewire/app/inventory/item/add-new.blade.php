@@ -6,12 +6,12 @@
     <main id="main" class="main">
 
         <div class="pagetitle">
-            <h1>Detail Item/Barang</h1>
+            <h1>Tambah Item/Barang</h1>
             <nav>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="{{route('appDashboardPage')}}">Home</a></li>
                     <li class="breadcrumb-item">Inventory Master</li>
-                    <li class="breadcrumb-item active">Item Details</li>
+                    <li class="breadcrumb-item active">Add Item</li>
                 </ol>
             </nav>
         </div><!-- End Page Title -->
@@ -33,6 +33,17 @@
                                     @error('nama_barang')
                                     <div class="text-danger">{{ $message }}</div>
                                     @enderror
+                                </div>
+
+                                <div class="col-12">
+                                    <label for="basic-url" class="form-label">Harga Barang</label>
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text" id="basic-addon3">Rp.</span>
+                                        <input wire:model="harga" type="text" class="form-control-lg" id="harga-barang">
+                                        @error('harga')
+                                        <div class="text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
                                 </div>
 
                                 <div class="col-12">
@@ -83,4 +94,21 @@
     </main><!-- End #main -->
 
     <livewire:PartialView.App.Footer />
+
+    <script>
+        (function() {
+            const hargaInput = document.getElementById('harga-barang');
+
+            if (!hargaInput) return;
+
+            hargaInput.addEventListener('input', function() {
+                let value = this.value.replace(/[^0-9]/g, ""); // hanya angka
+                if (value) {
+                    this.value = new Intl.NumberFormat('id-ID').format(value);
+                } else {
+                    this.value = "";
+                }
+            });
+        })();
+    </script>
 </div>

@@ -35,7 +35,7 @@ class SearchWithBarcode extends Component
         try {
             $client = new Client(['base_uri' => env('API_URL')]);
 
-            $res1 = $client->get('/api/supplier-barcode-search/' . $this->qrResult, [
+            $res1 = $client->get('/api/pengrajin-barcode-search/' . $this->qrResult, [
                 'headers' => [
                     'Accept' => 'application/json',
                     'Authorization' => 'Bearer ' . session('auth_data.token')

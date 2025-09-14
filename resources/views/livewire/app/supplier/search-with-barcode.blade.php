@@ -6,7 +6,7 @@
     <main id="main" class="main">
 
         <div class="pagetitle">
-            <h1>Cari Supplier dengan Barcode</h1>
+            <h1>Cari Pengrajin dengan Barcode</h1>
             <nav>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="{{route('appDashboardPage')}}">Home</a></li>
@@ -37,7 +37,7 @@
                         <input wire:model="qrResult" type="hidden" id="qrResult">
 
                         <div class="card-body" wire:poll="fetchResult">
-                            <h5 class="card-title">Result</h5>
+                            <h5 class="card-title">Hasil Pencarian</h5>
 
                             @if(!empty($supplierData) && $supplierData['is_found'])
 
@@ -46,7 +46,7 @@
                                 <img width="200" height="200"
                                     src="{{$logo_img}}"
                                     alt="Profile" class="img-fluid">
-                                <h3>{{ $supplierData['nama_supplier'] }}</h3>
+                                <h3>{{ $supplierData['nama_pengrajin'] }}</h3>
                                 <div class="row">
                                     <div class="col-6">
                                         <a href="{{ route('appSupplierDetailPage', ['supplierId' => $supplierData['id']]) }}" class="btn btn-info">Detail</a>

@@ -9,7 +9,7 @@ use Livewire\Attributes\Layout;
 class Index extends Component
 {
     #[Layout('components.layouts.app')]
-    #[Title('Home Page')]
+    #[Title('Emping Merapi')]
 
     public function render()
     {

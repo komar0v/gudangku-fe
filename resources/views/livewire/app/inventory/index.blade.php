@@ -74,7 +74,40 @@
                     </div>
                 </div>
 
-                
+                <div class="col-lg-4">
+
+                    <div class="card info-card sales-card">
+
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <h5 class="card-title">Manajemen Stok</h5>
+
+                                    <div class="d-flex align-items-center pb-4">
+                                        <a href="{{route('appAllStocksPage')}}" wire:navigate class="btn btn-info">
+                                            <i class="bi bi-box-seam me-2"></i>Stok Barang
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <h5 class="card-title">Stok Hampir Habis</h5>
+
+                                    <div class="d-flex align-items-center">
+                                        <div class="card-icon rounded-circle d-flex align-items-center justify-content-center bg-danger text-white">
+                                            <i class="bi bi-box-seam"></i>
+                                        </div>
+                                        <div class="ps-3">
+                                            <h6>{{$stokTipisCount}}</h6>
+                                            <span class="text-muted small pt-2 ps-1">Barang</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
             </div>
 
         </section>

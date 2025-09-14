@@ -48,6 +48,17 @@
                                 </div>
 
                                 <div class="col-12">
+                                    <label for="basic-url" class="form-label">Harga Barang</label>
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text" id="basic-addon3">Rp.</span>
+                                        <input wire:model="harga" type="text" class="form-control-lg" id="harga-barang">
+                                        @error('harga')
+                                        <div class="text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
+
+                                <div class="col-12">
                                     <div class="form-floating mb-3">
                                         <select required class="form-select" id="floatingSelect" aria-label="State" wire:model="kategori_id">
 
@@ -105,4 +116,21 @@
     </main><!-- End #main -->
 
     <livewire:PartialView.App.Footer />
+
+    <script>
+        (function() {
+            const hargaInput = document.getElementById('harga-barang');
+
+            if (!hargaInput) return;
+
+            hargaInput.addEventListener('input', function() {
+                let value = this.value.replace(/[^0-9]/g, ""); // hanya angka
+                if (value) {
+                    this.value = new Intl.NumberFormat('id-ID').format(value);
+                } else {
+                    this.value = "";
+                }
+            });
+        })();
+    </script>
 </div>

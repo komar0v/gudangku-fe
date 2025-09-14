@@ -155,7 +155,7 @@
 
                     <div class="col-2">
                         <div class="card info-card">
-                            <a href="{{route('appPantauStokPage')}}">
+                            <a href="{{route('appStatsObserverPage')}}">
                                 <div class="card-body">
                                     <h5 class="card-title text-center">Lihat Statistik</h5>
 

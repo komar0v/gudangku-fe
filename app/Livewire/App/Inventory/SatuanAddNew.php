@@ -39,7 +39,7 @@ class SatuanAddNew extends Component
 
         $data = [
             'nama_satuan' => $this->nama_satuan,
-            'kode_satuan' => $this->kode_satuan
+            'kode_satuan' => strtolower($this->kode_satuan)
         ];
 
         try {

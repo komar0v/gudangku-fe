@@ -35,7 +35,7 @@
                         <hr class="dropdown-divider">
                     </li>
                     <li>
-                        <a class="dropdown-item d-flex align-items-center" href="pages-faq.html">
+                        <a target="_blank" class="dropdown-item d-flex align-items-center" href="https://wa.me/6285174320326?text=Halo%20mas%20saya%20butuh%20bantuan%20mengenai%20aplikasi">
                             <i class="bi bi-question-circle"></i>
                             <span>Butuh Bantuan?</span>
                         </a>

@@ -17,6 +17,7 @@ class ShowAll extends Component
     #[Title('All Stock')]
 
     public $stokBarangList;
+    public $batasTresholdStok;
 
     public function mount()
     {
@@ -24,10 +25,12 @@ class ShowAll extends Component
             return;
         }
 
+        $this->batasTresholdStok = env('APP_STOCK_TRESHOLD');
+        
         try {
             $client = new Client(['base_uri' => env('API_URL')]);
 
-            $res1 = $client->get('/api/super-admin/manage/inventory/item/cek-stok-semua', [
+            $res1 = $client->get('/api/super-admin/manage/stocks/get-all-stok-barang', [
                 'headers' => [
                     'Accept' => 'application/json',
                     'Authorization' => 'Bearer ' . session('auth_data.token')

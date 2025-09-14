@@ -17,7 +17,8 @@ class Index extends Component
     #[Title('Inventory Master Data')]
 
     public $categoryList, $satuanBarangList;
-    public $itemCount;
+    public $itemCount, $stokTipisCount;
+    public $batasTresholdStok;
 
     public function mount()
     {
@@ -54,6 +55,17 @@ class Index extends Component
             ]);
 
             $this->itemCount = json_decode($res3->getBody()->getContents(), true)['total_items'];
+
+            $this->batasTresholdStok = env('APP_STOCK_TRESHOLD');
+
+            $res4 = $client->get('/api/count/stocks/get-stok-barang-tipis/'.$this->batasTresholdStok, [
+                'headers' => [
+                    'Accept' => 'application/json',
+                    'Authorization' => 'Bearer ' . session('auth_data.token')
+                ],
+            ]);
+
+            $this->stokTipisCount = json_decode($res4->getBody()->getContents(), true)['total_items'];
 
         } catch (RequestException $e) {
             if ($e->hasResponse()) {

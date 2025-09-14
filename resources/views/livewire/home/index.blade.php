@@ -10,24 +10,24 @@
                 <div class="row align-items-center">
                     <div class="col-lg-6">
                         <div class="hero-content" data-aos="fade-up" data-aos-delay="200">
-                            <h2>Strategic Solutions for Business Growth</h2>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                            <h2>Emping Melinjo Merapi</h2>
+                            <p>Rasakan renyahnya emping melinjo khas lereng Merapi. Dibuat dari bahan pilihan, diolah secara tradisional, dan dipercaya ratusan pelanggan setiap bulannya.</p>
                             <div class="hero-btns">
-                                <a href="#consultation" class="btn btn-primary">Get a Free Consultation</a>
-                                <a href="#services" class="btn btn-outline">Our Services</a>
+                                <a wire:navigate href="{{ route('tentangPage') }}" class="btn btn-primary">Tentang Kami</a>
+                                <a wire:navigate href="{{ route('layananPage') }}" class="btn btn-outline">Blog</a>
                             </div>
                             <div class="hero-stats">
                                 <div class="stat-item">
-                                    <h3><span data-purecounter-start="0" data-purecounter-end="15" data-purecounter-duration="1" class="purecounter"></span>+</h3>
-                                    <p>Years Experience</p>
+                                    <h3><span data-purecounter-start="0" data-purecounter-end="100" data-purecounter-duration="1" class="purecounter"></span>+</h3>
+                                    <p>Order per bulan</p>
                                 </div>
                                 <div class="stat-item">
                                     <h3><span data-purecounter-start="0" data-purecounter-end="500" data-purecounter-duration="1" class="purecounter"></span>+</h3>
-                                    <p>Clients Worldwide</p>
+                                    <p>Pelanggan</p>
                                 </div>
                                 <div class="stat-item">
-                                    <h3><span data-purecounter-start="0" data-purecounter-end="98" data-purecounter-duration="1" class="purecounter"></span>%</h3>
-                                    <p>Success Rate</p>
+                                    <h3><span data-purecounter-start="0" data-purecounter-end="15" data-purecounter-duration="1" class="purecounter"></span>+</h3>
+                                    <p>Negara Export</p>
                                 </div>
                             </div>
                         </div>
@@ -46,8 +46,8 @@
 
             <!-- Section Title -->
             <div class="container section-title" data-aos="fade-up">
-                <h2>Our Consulting Process</h2>
-                <div><span>Check Our</span> <span class="description-title">Our Consulting Process</span></div>
+                <h2>Proses Kami</h2>
+                <div>Dari bahan pilihan hingga emping renyah siap dinikmati.</div>
             </div><!-- End Section Title -->
 
             <div class="container" data-aos="fade-up" data-aos-delay="100">
@@ -55,14 +55,10 @@
                 <div class="row">
                     <div class="col-lg-6" data-aos="fade-up" data-aos-delay="200">
                         <div class="steps-content">
-                            <h2>Our Proven Consulting Process</h2>
-                            <p class="lead">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo.</p>
-                            <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
-
-                            <div class="steps-cta">
-                                <a href="#contact" class="btn btn-primary">Start Your Project</a>
-                                <a href="#about" class="btn btn-outline">Learn More</a>
+                            <div class="hero-image" data-aos="zoom-out" data-aos-delay="300">
+                                <img src="assets/img/about/about-21.webp" alt="Consulting Services" class="img-fluid">
                             </div>
+
                         </div>
                     </div>
 
@@ -71,40 +67,40 @@
                             <div class="step-item">
                                 <div class="step-number">01</div>
                                 <div class="step-content">
-                                    <h3>Discovery &amp; Analysis</h3>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo.</p>
+                                    <h3>Pemilihan Bahan Baku</h3>
+                                    <p>Kami hanya menggunakan biji melinjo terbaik yang dipanen langsung dari petani lokal.</p>
                                 </div>
                             </div>
 
                             <div class="step-item">
                                 <div class="step-number">02</div>
                                 <div class="step-content">
-                                    <h3>Strategy Development</h3>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo.</p>
+                                    <h3>Pengolahan Tradisional</h3>
+                                    <p>Proses ditumbuk, dipipihkan, dan dijemur masih menggunakan cara tradisional untuk menjaga cita rasa otentik.</p>
                                 </div>
                             </div>
 
                             <div class="step-item">
                                 <div class="step-number">03</div>
                                 <div class="step-content">
-                                    <h3>Implementation</h3>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo.</p>
+                                    <h3>Pengeringan Alami</h3>
+                                    <p>Emping dijemur di bawah sinar matahari, sehingga lebih sehat, awet, dan bebas dari bahan kimia berbahaya.</p>
                                 </div>
                             </div>
 
                             <div class="step-item">
                                 <div class="step-number">04</div>
                                 <div class="step-content">
-                                    <h3>Monitoring &amp; Optimization</h3>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo.</p>
+                                    <h3>Pengemasan Higienis</h3>
+                                    <p>Emping dikemas rapi dan higienis agar kualitas tetap terjaga sampai di tangan pelanggan.</p>
                                 </div>
                             </div>
 
                             <div class="step-item">
                                 <div class="step-number">05</div>
                                 <div class="step-content">
-                                    <h3>Evaluation &amp; Reporting</h3>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo.</p>
+                                    <h3>Siap Dinikmati</h3>
+                                    <p>Emping Melinjo Merapi siap jadi camilan renyah maupun pelengkap hidangan khas Nusantara.</p>
                                 </div>
                             </div>
                         </div>

@@ -21,8 +21,7 @@ class Edit extends Component
     public $supplierData;
     public $logo_img, $created_at;
     public $logo_file;
-    public $nama_supplier, $kategori_supplier, $negara, $email_kantor, $website, $npwp, $alamat, $tentang, $user_id, $nomer_telepon_kantor;
-    public $userList, $kategoriSupplierList;
+    public $nama_pengrajin, $alamat, $tentang, $nomer_wa;
 
     public function mount($supplierId)
     {
@@ -33,7 +32,7 @@ class Edit extends Component
         try {
             $client = new Client(['base_uri' => env('API_URL')]);
 
-            $res1 = $client->get('/api/super-admin/manage/supplier/details/' . $supplierId, [
+            $res1 = $client->get('/api/super-admin/manage/pengrajin/details/' . $supplierId, [
                 'headers' => [
                     'Accept' => 'application/json',
                     'Authorization' => 'Bearer ' . session('auth_data.token')
@@ -42,35 +41,12 @@ class Edit extends Component
 
             $this->supplierData = json_decode($res1->getBody()->getContents(), true);
 
-            $res2 = $client->get('/api/super-admin/manage/get-all-categories', [
-                'headers' => [
-                    'Accept' => 'application/json',
-                    'Authorization' => 'Bearer ' . session('auth_data.token')
-                ],
-            ]);
-
-            $this->kategoriSupplierList = json_decode($res2->getBody()->getContents(), true);
-
-            $res3 = $client->get('/api/super-admin/manage/supplier/assignable-users/' . $this->supplierData['user_id'], [
-                'headers' => [
-                    'Accept' => 'application/json',
-                    'Authorization' => 'Bearer ' . session('auth_data.token')
-                ],
-            ]);
-
-            $this->userList = json_decode($res3->getBody()->getContents(), true);
 
             $this->logo_img = env('API_URL') . '/' . $this->supplierData['logo_file_path'];
             $this->created_at = IndoDateFormat::formatIndo($this->supplierData['created_at']);
 
-            $this->nama_supplier = $this->supplierData['nama_supplier'];
-            $this->kategori_supplier = $this->supplierData['kategori_supplier'];
-            $this->negara = $this->supplierData['negara'];
-            $this->email_kantor = $this->supplierData['email_kantor'];
-            $this->nomer_telepon_kantor = $this->supplierData['nomer_telepon_kantor'];
-            $this->website = $this->supplierData['website'];
-            $this->npwp = $this->supplierData['npwp'];
-            $this->user_id = $this->supplierData['user_id'];
+            $this->nama_pengrajin = $this->supplierData['nama_pengrajin'];
+            $this->nomer_wa = $this->supplierData['nomer_wa'];
             $this->tentang = $this->supplierData['tentang'];
             $this->alamat = $this->supplierData['alamat'];
         } catch (RequestException $e) {
@@ -104,21 +80,13 @@ class Edit extends Component
     public function saveSupplierData1()
     {
         $this->validate([
-            'negara' => 'required',
-            'nomer_telepon_kantor' => 'required|regex:/^\+?[0-9\s\-]{7,20}$/',
-            'email_kantor' => 'required|email',
-            'website' => 'required',
-            'npwp' => 'required',
+            'nomer_wa' => 'required|regex:/^\+?[0-9\s\-]{7,20}$/',
             'alamat' => 'required',
             'tentang' => 'required',
         ]);
 
         $data = [
-            'negara' => $this->negara,
-            'nomer_telepon_kantor' => $this->nomer_telepon_kantor,
-            'email_kantor' => $this->email_kantor,
-            'website' => $this->website,
-            'npwp' => $this->npwp,
+            'nomer_wa' => $this->nomer_wa,
             'alamat' => $this->alamat,
             'tentang' => $this->tentang,
         ];
@@ -126,7 +94,7 @@ class Edit extends Component
         try {
             $client = new Client(['base_uri' => env('API_URL')]);
 
-            $res = $client->post('/api/super-admin/manage/supplier/update/' . $this->supplierData['id'], [
+            $res = $client->post('/api/super-admin/manage/pengrajin/update/' . $this->supplierData['id'], [
                 'headers' => [
                     'Accept' => 'application/json',
                     'Authorization' => 'Bearer ' . session('auth_data.token')
@@ -136,7 +104,7 @@ class Edit extends Component
 
             $responseData = json_decode($res->getBody()->getContents(), true);
 
-            session()->flash('success_message', 'Perubahan data supplier ' . $responseData['data']['nama_supplier'] . ' berhasil disimpan');
+            session()->flash('success_message', 'Perubahan data pengrajin ' . $responseData['data']['nama_pengrajin'] . ' berhasil disimpan');
             $this->redirectRoute('appSupplierDetailPage', ['supplierId' => $this->supplierData['id']], navigate: true);
         } catch (RequestException $e) {
             if ($e->hasResponse()) {
@@ -158,21 +126,17 @@ class Edit extends Component
 
     public function saveSupplierData2(){
         $this->validate([
-            'nama_supplier'=>'required',
-            'kategori_supplier'=>'required',
-            'user_id'=>'required'
+            'nama_pengrajin'=>'required',
         ]);
 
         $data=[
-            'nama_supplier'=>$this->nama_supplier,
-            'kategori_supplier'=>$this->kategori_supplier,
-            'user_id'=>$this->user_id,
+            'nama_pengrajin'=>$this->nama_pengrajin,
         ];
 
         try {
             $client = new Client(['base_uri' => env('API_URL')]);
 
-            $res = $client->post('/api/super-admin/manage/supplier/update/' . $this->supplierData['id'], [
+            $res = $client->post('/api/super-admin/manage/pengrajin/update/' . $this->supplierData['id'], [
                 'headers' => [
                     'Accept' => 'application/json',
                     'Authorization' => 'Bearer ' . session('auth_data.token')
@@ -182,7 +146,7 @@ class Edit extends Component
 
             $responseData = json_decode($res->getBody()->getContents(), true);
 
-            session()->flash('success_message', 'Perubahan data supplier ' . $responseData['data']['nama_supplier'] . ' berhasil disimpan');
+            session()->flash('success_message', 'Perubahan data pengrajin ' . $responseData['data']['nama_pengrajin'] . ' berhasil disimpan');
             $this->redirectRoute('appSupplierDetailPage', ['supplierId' => $this->supplierData['id']], navigate: true);
         } catch (RequestException $e) {
             if ($e->hasResponse()) {
@@ -217,7 +181,7 @@ class Edit extends Component
         try {
             $client = new Client(['base_uri' => env('API_URL')]);
 
-            $res = $client->post('/api/super-admin/manage/supplier/update/' . $this->supplierData['id'], [
+            $res = $client->post('/api/super-admin/manage/pengrajin/update/' . $this->supplierData['id'], [
                 'headers' => [
                     'Accept' => 'application/json',
                     'Authorization' => 'Bearer ' . session('auth_data.token')
@@ -235,7 +199,7 @@ class Edit extends Component
             $responseData = json_decode($res->getBody()->getContents(), true);
             session()->flash('success_message', $responseData['message']);
 
-            $this->redirectRoute('appSupplierDetailPage', ['supplierId' => $this->supplierData['id']], navigate: true);
+            $this->redirectRoute('appSupplierDetailPage', ['supplierId' => $this->supplierData['id']]);
         } catch (RequestException $e) {
             if ($e->hasResponse()) {
                 $response = $e->getResponse();

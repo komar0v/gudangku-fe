@@ -26,6 +26,8 @@
 
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
     <style>
         /* Sesuaikan tinggi elemen Select2 agar mirip dengan Bootstrap form-select */
         .select2-container .select2-selection--single {
@@ -65,10 +67,12 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
     <script src="{{ url(env('APP_ASSET_URL') . '/vendor/simple-datatables/simple-datatables.js') }}"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <!-- Template Main JS File -->
 
     <script src="{{ url(env('APP_ASSET_URL') . '/js/main.js') }}"></script>
-    
+
     @livewireScripts
 
     <!-- Header Account Info Dropdown -->

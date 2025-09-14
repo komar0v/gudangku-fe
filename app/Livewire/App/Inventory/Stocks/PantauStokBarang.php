@@ -14,10 +14,11 @@ class PantauStokBarang extends Component
     use RequireLogin;
 
     #[Layout('components.layouts.applayout')]
-    #[Title('Stock Observer')]
+    #[Title('Stats Observer')]
 
-    public $barangKeluarMasukToday, $lowStokItemCount, $supplierChart;
-    public $namaSupplier, $barangMasuk;
+    public $ambilKembaliToday, $top10PengrajinToday;
+    public $stokTipisCount;
+    public $pluckAmbil, $pluckKembali, $pluckPengrajin;
 
     public function mount()
     {
@@ -30,40 +31,42 @@ class PantauStokBarang extends Component
 
     public function fetchStatistics()
     {
+
+        $today = now('Asia/Jakarta')->format('Y-m-d');
+
         try {
             $client = new Client(['base_uri' => env('API_URL')]);
 
-            $today = now('Asia/Jakarta')->format('Y-m-d');
-            $res3 = $client->get('/api/super-admin/statistics/income-outcome-items/' . $today, [
+            $res3 = $client->get('/api/count/transactions/on-a-day/' . $today, [
                 'headers' => [
                     'Accept' => 'application/json',
                     'Authorization' => 'Bearer ' . session('auth_data.token')
                 ],
             ]);
 
-            $this->barangKeluarMasukToday = json_decode($res3->getBody()->getContents(), true);
+            $this->ambilKembaliToday = json_decode($res3->getBody()->getContents(), true);
 
-            $res4 = $client->get('/api/super-admin/manage/inventory/item/get-hampir-habis', [
+            $res4 = $client->get('/api/count/stocks/get-stok-barang-tipis/' . env('APP_STOCK_TRESHOLD'), [
                 'headers' => [
                     'Accept' => 'application/json',
                     'Authorization' => 'Bearer ' . session('auth_data.token')
                 ],
             ]);
 
-            $this->lowStokItemCount = count(json_decode($res4->getBody()->getContents(), true));
+            $this->stokTipisCount = json_decode($res4->getBody()->getContents(), true)['total_items'];
 
-            $res5 = $client->get('/api/super-admin/statistics/inventory/supplier/get-top5-pemasok', [
+            $res5 = $client->get('/api/super-admin/statistics/graph/getTop10PengrajinOnDate?date='.$today, [
                 'headers' => [
                     'Accept' => 'application/json',
                     'Authorization' => 'Bearer ' . session('auth_data.token')
                 ],
             ]);
 
-            $this->supplierChart = json_decode($res5->getBody()->getContents(), true);
-
-            $this->namaSupplier = json_encode(collect($this->supplierChart)->pluck('nama_supplier'), true);
-            $this->barangMasuk = json_encode(collect($this->supplierChart)->pluck('barang_masuk'), true);
-
+            $this->top10PengrajinToday = json_decode($res5->getBody()->getContents(), true);
+            $this->pluckAmbil = json_encode(collect($this->top10PengrajinToday)->pluck('ambil'), true);
+            $this->pluckKembali = json_encode(collect($this->top10PengrajinToday)->pluck('kembali'), true);
+            $this->pluckPengrajin = json_encode(collect($this->top10PengrajinToday)->pluck('nama_pengrajin'), true);
+            
         } catch (RequestException $e) {
             if ($e->hasResponse()) {
                 $response = $e->getResponse();

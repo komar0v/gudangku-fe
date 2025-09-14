@@ -9,20 +9,18 @@ use Livewire\Attributes\Layout;
 use App\Livewire\Traits\RequireLogin;
 use GuzzleHttp\Exception\RequestException;
 
-class ItemIncome extends Component
+class Pengambilan extends Component
 {
     use RequireLogin;
 
     #[Layout('components.layouts.applayout')]
-    #[Title('Item Income Stock')]
+    #[Title('Pengambilan')]
 
+    public $successMessage, $errorMessage;
+    public $stokData, $pengrajinData;
+    public $pengrajin_id, $berat_pengambilan, $item_id;
     public $qrResult = "default";
-    public $supplierData;
     public $listItems;
-    public $item_id, $jumlah, $berat_total;
-
-    public $successMessage;
-    public $errorMessage;
 
     public function mount()
     {
@@ -33,13 +31,47 @@ class ItemIncome extends Component
         try {
             $client = new Client(['base_uri' => env('API_URL')]);
 
-            $res2 = $client->get('/api/super-admin/manage/inventory/item/get-all-lite', [
+            $res2 = $client->get('/api/inventory/item/get-all-lite', [
                 'headers' => [
                     'Accept' => 'application/json',
                     'Authorization' => 'Bearer ' . session('auth_data.token')
                 ],
             ]);
+
             $this->listItems = json_decode($res2->getBody()->getContents(), true)['data'];
+        } catch (RequestException $e) {
+            if ($e->hasResponse()) {
+                $response = $e->getResponse();
+                $body = json_decode($response->getBody()->getContents());
+
+                if ($response->getStatusCode() == 403) {
+                    //Forbidden
+                    session()->flash('error_message', 'Forbidden.');
+                    $this->redirectRoute('appDashboardPage');
+                    return;
+                } else {
+                    dd($body);
+                }
+            }
+            throw $e;
+        }
+    }
+
+    public function fetchResult()
+    {
+        $this->qrResult;
+
+        try {
+            $client = new Client(['base_uri' => env('API_URL')]);
+
+            $res1 = $client->get('/api/pengrajin-barcode-search/' . $this->qrResult, [
+                'headers' => [
+                    'Accept' => 'application/json',
+                    'Authorization' => 'Bearer ' . session('auth_data.token')
+                ],
+            ]);
+
+            $this->pengrajinData = json_decode($res1->getBody()->getContents(), true);
         } catch (RequestException $e) {
             if ($e->hasResponse()) {
                 $response = $e->getResponse();
@@ -62,26 +94,22 @@ class ItemIncome extends Component
     {
         return [
             'item_id' => 'required',
-            'jumlah' => 'required|integer',
-            'berat_total' => 'required|numeric',
+            'berat_pengambilan' => 'required|numeric',
         ];
     }
 
-    public function fetchResult()
+    public function cekStok($itemId)
     {
-        $this->qrResult;
-
         try {
             $client = new Client(['base_uri' => env('API_URL')]);
 
-            $res1 = $client->get('/api/super-admin/transactions/supplier-barcode-search/' . $this->qrResult, [
+            $res = $client->get('/api/inventory/stocks/' . $itemId . '/get-stock', [
                 'headers' => [
                     'Accept' => 'application/json',
                     'Authorization' => 'Bearer ' . session('auth_data.token')
                 ],
             ]);
-
-            $this->supplierData = json_decode($res1->getBody()->getContents(), true);
+            $this->stokData = json_decode($res->getBody()->getContents(), true);
         } catch (RequestException $e) {
             if ($e->hasResponse()) {
                 $response = $e->getResponse();
@@ -100,22 +128,22 @@ class ItemIncome extends Component
         }
     }
 
-    public function saveBarangMasuk()
+    public function savePengambilan()
     {
         $this->validate();
 
-        $supplier_id = $this->qrResult;
+        $this->pengrajin_id = $this->qrResult;
+
         $data = [
-            'supplier_id' => $supplier_id,
             'item_id' => $this->item_id,
-            'jumlah' => $this->jumlah,
-            'berat_total' => $this->berat_total,
+            'pengrajin_id' => $this->pengrajin_id,
+            'berat_pengambilan' => $this->berat_pengambilan,
         ];
 
         try {
             $client = new Client(['base_uri' => env('API_URL')]);
 
-            $res = $client->post('/api/super-admin/transactions/inventory/incoming-item', [
+            $res = $client->post('/api/transactions/inventory/pengambilan', [
                 'headers' => [
                     'Accept' => 'application/json',
                     'Authorization' => 'Bearer ' . session('auth_data.token')
@@ -123,20 +151,25 @@ class ItemIncome extends Component
                 'json' => $data
             ]);
 
-            $resbody = json_decode($res->getBody()->getContents(), true);
+            $responseData = json_decode($res->getBody()->getContents(), true);
 
-            $this->successMessage = $resbody['message'];
+            $this->successMessage = $responseData['message'];
 
-            // Kirim event ke browser
-            $this->dispatch('success-message');
+            $this->cekStok($this->item_id);
         } catch (RequestException $e) {
             if ($e->hasResponse()) {
                 $response = $e->getResponse();
-                $body = json_decode($response->getBody()->getContents(), true);
+                $body = json_decode($response->getBody()->getContents());
 
-                if ($response->getStatusCode() == 422) {
+                if ($response->getStatusCode() == 400) {
 
-                    $this->errorMessage = "Unexpected Error: " . json_encode($body, JSON_PRETTY_PRINT);
+                    session()->flash('error_message', $body->message);
+                    $this->errorMessage = $body->message;
+                    return;
+                } else if ($response->getStatusCode() == 422) {
+
+                    session()->flash('error_message', $body->message);
+                    $this->errorMessage = $body->message;
                     return;
                 } else {
                     dd($body);
@@ -146,8 +179,14 @@ class ItemIncome extends Component
         }
     }
 
+    public function clearAlert()
+    {
+        $this->successMessage = null;
+        $this->errorMessage = null;
+    }
+
     public function render()
     {
-        return view('livewire.app.inventory.transactions.item-income');
+        return view('livewire.app.inventory.transactions.pengambilan');
     }
 }

@@ -10,7 +10,7 @@
             <nav>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="{{route('appDashboardPage')}}">Home</a></li>
-                    <li class="breadcrumb-item">Supplier Master</li>
+                    <li class="breadcrumb-item">Pengrajin Master</li>
                     <li class="breadcrumb-item">Detail</li>
                     <li class="breadcrumb-item active">Visit Log</li>
                 </ol>
@@ -23,18 +23,31 @@
                 <div class="col">
                     <div class="card">
                         <div class="card-body">
-                            
+
                             <table class="table datatable">
                                 <thead>
                                     <tr>
-                                        <th scope="col">Waktu Kunjungan</th>
+                                        <th scope="col">TRX ID</th>
+                                        <th scope="col">Barang</th>
+                                        <th scope="col">Waktu Pengambilan</th>
+                                        <th scope="col">Waktu Pengembalian</th>
+                                        <th scope="col">Aksi</th>
                                     </tr>
                                 </thead>
 
                                 <tbody>
                                     @foreach ($visitLogs as $log)
                                     <tr>
-                                        <td>{{$log['visited_at']}}</td>
+                                        <td>{{ explode('-', $log['id'])[1] }}</td>
+                                        <td>{{$log['item']['nama_barang']}}</td>
+                                        <td>{{$log['timestamp_pengambilan']}}</td>
+                                        <td>@if ($log['timestamp_pengembalian'])
+                                            {{ $log['timestamp_pengembalian'] }}
+                                            @else
+                                            <span class="text-danger">BELUM ADA</span>
+                                            @endif
+                                        </td>
+                                        <td><a wire:navigate href="{{ route('appTransactionDetails', ['transactionId' => $log['id']]) }}" class="btn btn-info btn-sm"><i class="bi bi-eye"></i> Detail</a></td>
                                     </tr>
                                     @endforeach
 

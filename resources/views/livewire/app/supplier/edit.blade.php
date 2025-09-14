@@ -27,6 +27,8 @@
             </div>
             @endif
 
+            <a href="{{route('appSupplierDetailPage',['supplierId'=>$supplierData['id']])}}" wire:navigate class="btn btn-secondary btn-sm mb-2"><i class="bi bi-arrow-left me-1"></i>Kembali</a>
+
             <div class="row">
                 <div class="col">
 
@@ -44,15 +46,14 @@
 
                                     <button type="button" data-bs-toggle="modal" data-bs-target="#modalChangeLogo" class="btn btn-primary btn-sm"><i class="bi bi-pencil me-1"></i>Ganti Logo</button>
                                     <hr>
-                                    <h3>{{$supplierData['nama_supplier']}}</h3>
-                                    <h4>{{$supplierData['category']['nama_kategori']}}</h4>
+                                    <h3>{{$supplierData['nama_pengrajin']}}</h3>
 
                                 </div>
                             </div>
 
                             <div class="col-8">
                                 <div class="card-body">
-                                    <h5 class="card-title">Data Supplier</h5>
+                                    <h5 class="card-title">Data Pengrajin</h5>
                                     <ul class="nav nav-tabs nav-tabs-bordered">
 
                                         <li class="nav-item">
@@ -78,54 +79,15 @@
 
                                                 <h5 class="card-title">Detail</h5>
 
-                                                <div class="row mb-3">
-                                                    <label for="inputText" class="col-sm-2 col-form-label">Negara</label>
-                                                    <div class="col-sm-10">
-                                                        <input wire:model="negara" type="text" class="form-control">
-                                                        @error('negara')
-                                                        <div class="text-danger">{{ $message }}</div>
-                                                        @enderror
-                                                    </div>
-                                                </div>
 
                                                 <div class="row mb-3">
-                                                    <label for="inputText" class="col-sm-2 col-form-label">Nomer Telepon</label>
+                                                    <label for="inputText" class="col-sm-2 col-form-label">Nomer WhatsApp</label>
                                                     <div class="col-sm-10">
                                                         <div class="input-group">
                                                             <span class="input-group-text" id="basic-addon1">+62</span>
-                                                            <input type="text" class="form-control" wire:model="nomer_telepon_kantor">
+                                                            <input type="text" class="form-control" wire:model="nomer_wa">
                                                         </div>
-                                                        @error('nomer_telepon_kantor')
-                                                        <div class="text-danger">{{ $message }}</div>
-                                                        @enderror
-                                                    </div>
-                                                </div>
-
-                                                <div class="row mb-3">
-                                                    <label for="inputText" class="col-sm-2 col-form-label">Email Kantor</label>
-                                                    <div class="col-sm-10">
-                                                        <input wire:model="email_kantor" type="text" class="form-control">
-                                                        @error('email_kantor')
-                                                        <div class="text-danger">{{ $message }}</div>
-                                                        @enderror
-                                                    </div>
-                                                </div>
-
-                                                <div class="row mb-3">
-                                                    <label for="inputText" class="col-sm-2 col-form-label">Website</label>
-                                                    <div class="col-sm-10">
-                                                        <input wire:model="website" type="text" class="form-control">
-                                                        @error('website')
-                                                        <div class="text-danger">{{ $message }}</div>
-                                                        @enderror
-                                                    </div>
-                                                </div>
-
-                                                <div class="row mb-3">
-                                                    <label for="inputText" class="col-sm-2 col-form-label">NPWP</label>
-                                                    <div class="col-sm-10">
-                                                        <input wire:model="npwp" type="text" class="form-control">
-                                                        @error('npwp')
+                                                        @error('nomer_wa')
                                                         <div class="text-danger">{{ $message }}</div>
                                                         @enderror
                                                     </div>
@@ -156,37 +118,14 @@
 
                                         <div class="tab-pane fade pt-3" id="tab-sistem">
                                             <form wire:submit.prevent="saveSupplierData2">
-                                                <h5 class="card-title">Supplier Data</h5>
+                                                <h5 class="card-title">Pengrajin Data</h5>
                                                 <div class="row mb-3">
-                                                    <label for="inputText" class="col-sm-2 col-form-label">Nama Supplier</label>
+                                                    <label for="inputText" class="col-sm-2 col-form-label">Nama Pengrajin</label>
                                                     <div class="col-sm-10">
-                                                        <input wire:model="nama_supplier" type="text" class="form-control">
-                                                        @error('nama_supplier')
+                                                        <input wire:model="nama_pengrajin" type="text" class="form-control">
+                                                        @error('nama_pengrajin')
                                                         <div class="text-danger">{{ $message }}</div>
                                                         @enderror
-                                                    </div>
-                                                </div>
-                                                <div class="row mb-3">
-                                                    <label for="inputText" class="col-sm-2 col-form-label">Kategori</label>
-                                                    <div class="col-sm-10">
-                                                        <select wire:model="kategori_supplier" class="form-select" required>
-                                                            @foreach ($kategoriSupplierList['data'] as $kategori)
-                                                            <option value="{{ $kategori['id'] }}">{{ $kategori['nama_kategori'] }}</option>
-                                                            @endforeach
-
-                                                        </select>
-                                                    </div>
-                                                </div>
-
-                                                <h5 class="card-title">Akun Supplier</h5>
-                                                <div class="row mb-3">
-                                                    <label for="inputText" class="col-sm-2 col-form-label">Akun</label>
-                                                    <div class="col-sm-10">
-                                                        <select wire:model="user_id" style="width: 100%;" class="form-select" required>
-                                                            @foreach ($userList as $akun)
-                                                            <option value="{{ $akun['id'] }}">{{ $akun['fullname'] }} | {{ $akun['email'] }}</option>
-                                                            @endforeach
-                                                        </select>
                                                     </div>
                                                 </div>
 

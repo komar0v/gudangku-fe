@@ -7,6 +7,11 @@
         <!-- About Section -->
         <section id="about" class="about section dark-background">
 
+        <div class="container section-title" data-aos="fade-up">
+                <h2>Tentang</h2>
+                <div><span>Mengenai</span> <span class="description-title">Kami</span></div>
+            </div>
+
             <div class="container" data-aos="fade-up" data-aos-delay="100">
 
                 <div class="row align-items-center">
@@ -24,8 +29,7 @@
                         <div class="about-content">
                             <h2>We Help Businesses Reach Their Full Potential</h2>
                             <p class="lead">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo.</p>
-                            <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
-
+                            
                             <div class="row features-row">
                                 <div class="col-md-6">
                                     <div class="feature-item">
@@ -66,10 +70,6 @@
                                         <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.</p>
                                     </div>
                                 </div>
-                            </div>
-
-                            <div class="cta-button">
-                                <a href="#about" class="btn btn-primary">Learn More About Us</a>
                             </div>
                         </div>
                     </div>

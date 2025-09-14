@@ -14,10 +14,9 @@ class AddNew extends Component
     use RequireLogin;
 
     #[Layout('components.layouts.applayout')]
-    #[Title('Show All Items')]
+    #[Title('Add New Item')]
 
-    public $itemData;
-    public $nama_barang, $kategori_id, $satuan_id;
+    public $nama_barang, $kategori_id, $satuan_id, $harga;
     public $categoryList, $satuanList;
 
     public function mount()
@@ -75,6 +74,7 @@ class AddNew extends Component
             'nama_barang' => 'required',
             'kategori_id' => 'required',
             'satuan_id' => 'required',
+            'harga'=> 'required|numeric',
         ];
     }
 
@@ -85,6 +85,7 @@ class AddNew extends Component
             'nama_barang'=>$this->nama_barang,
             'kategori_id'=>$this->kategori_id,
             'satuan_id'=>$this->satuan_id,
+            'harga'=>preg_replace('/[^0-9]/', '', $this->harga)
         ];
 
         try {
