@@ -22,6 +22,7 @@ use App\Livewire\App\Inventory\Item\ShowAll as AllItemsPage;
 use App\Livewire\App\Inventory\Item\AddNew as AddNewItemPage;
 use App\Livewire\App\Inventory\Item\Details as ItemDetailsPage;
 use App\Livewire\App\Inventory\Item\Filters as ItemFilteredPage;
+use App\Livewire\App\Inventory\Item\InOutItemNonPengrajin as ItemInOutNonPengrajinPage;
 
 use App\Livewire\App\Inventory\Transactions\Pengambilan as PengambilanPage;
 use App\Livewire\App\Inventory\Transactions\Pengembalian as PengembalianPage;
@@ -89,6 +90,7 @@ Route::get('/app/inventory/items/all', AllItemsPage::class)->name('appShowAllIte
 Route::get('/app/inventory/items/add', AddNewItemPage::class)->name('appAddItemPage');
 Route::get('/app/inventory/items/{itemId}/detail', ItemDetailsPage::class)->name('appItemDetailsPage');
 Route::get('/app/inventory/items/filtered', ItemFilteredPage::class)->name('appFilteredItemsPage');
+Route::get('/app/inventory/items/in-out', ItemInOutNonPengrajinPage::class)->name('appItemInOutNonPengrajinPage');
 
 Route::get('/app/inventory/item-stocks', AllStocksPage::class)->name('appAllStocksPage');
 Route::get('/app/inventory/item-stocks/{itemId}/edit', UpdateStocksPage::class)->name('appUpdateStocksPage');

@@ -116,6 +116,34 @@
             <div class="row">
                 <div class="col-lg-6">
 
+                    <div class="row dashboard">
+                        <div class="col-6">
+
+                            <div class="card info-card sales-card">
+                                <a href="{{route('appItemInOutNonPengrajinPage')}}">
+                                    <div class="card-body">
+                                        <h5 class="card-title text-center">Input Item Keluar/Masuk</h5>
+
+                                        <div class="d-flex align-items-center justify-content-center">
+                                            <div class="d-flex align-items-center text-center revenue-card">
+                                                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                                    <i class="bi bi-arrow-bar-up"></i>
+                                                </div>
+                                            </div>
+                                            <p style="font-size: 40px;">/</p>
+                                            <div class="d-flex align-items-center">
+                                                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                                    <i class="bi bi-arrow-bar-down"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+
+                        </div>
+                    </div>
+
                     <div class="row">
                         <div class="col">
                             <div class="card">

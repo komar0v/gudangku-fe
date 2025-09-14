@@ -164,7 +164,7 @@
                         <div class="card info-card sales-card">
 
                             <div class="card-body">
-                                <h5 class="card-title">Statistik Top 10 Pengrajin Hari Ini</h5>
+                                <h5 class="card-title">Statistik Barang Keluar-Masuk</h5>
                                 <div id="columnChart"></div>
 
                                 <input id="pluckPengambilan" type="hidden" value="{{$pluckAmbil}}">
@@ -179,10 +179,10 @@
 
                                         new ApexCharts(document.querySelector("#columnChart"), {
                                             series: [{
-                                                name: 'Ambil',
+                                                name: 'Keluar',
                                                 data: ambil
                                             }, {
-                                                name: 'Kembali',
+                                                name: 'Masuk',
                                                 data: kembali
                                             }, ],
                                             chart: {

@@ -1,4 +1,6 @@
 <div>
+    <script src="https://unpkg.com/slim-select@latest/dist/slimselect.min.js"></script>
+    <link href="https://unpkg.com/slim-select@latest/dist/slimselect.css" rel="stylesheet">
     <livewire:PartialView.App.Header />
 
     <livewire:PartialView.App.Sidebar />
@@ -51,7 +53,6 @@
                                     <img width="60" height="60" src="{{ url(env('APP_ASSET_URL') . '/img/loading.gif') }}" alt="Loading...">
                                 </div>
 
-                                <a wire:click="showInvGraphMonthly" class="btn btn-info"><i class="bi bi-arrow-up-right me-1"></i>Tampilkan Grafik</a>
                             </div>
 
 
@@ -81,18 +82,92 @@
                                 <div wire:loading wire:target="cetakLaporanInvHarian">
                                     <img width="60" height="60" src="{{ url(env('APP_ASSET_URL') . '/img/loading.gif') }}" alt="Loading...">
                                 </div>
-                                <a wire:click="showInvGraphDaily" class="btn btn-info"><i class="bi bi-arrow-up-right me-1"></i>Tampilkan Grafik</a>
                             </div>
                         </div>
                     </div>
                 </div>
 
+                <div class="col-lg-6">
+
+                    <div class="card info-card sales-card">
+
+                        <div class="card-body">
+                            <h5 class="card-title">Laporan Transaksi Pengrajin</h5>
+                            <p>Laporan inventory barang keluar masuk berdasarkan pengrajin dan tanggal yang dipilih</p>
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label">Tanggal Mulai</label>
+                                <div class="col-sm-10">
+                                    <input wire:model="startDatePeng" type="date" class="form-control">
+                                </div>
+                                @error('startDatePeng')
+                                <div class="text-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label">Tanggal Akhir</label>
+                                <div class="col-sm-10">
+                                    <input wire:model="endDatePeng" type="date" class="form-control">
+                                </div>
+                                @error('endDatePeng')
+                                <div class="text-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="row mb-3">
+                                <label class="col-sm-2 col-form-label">Pengrajin</label>
+                                <div class="col-sm-10" wire:ignore>
+                                    <select wire:model="pengrajinId" style="width: 100%;" id="selectPengrajin" wire:key="selectPengrajin-{{ count($pengrajinLists) }}">>
+                                        <option value="" disabled selected>-Pilih Pengrajin-</option>
+                                        @foreach ($pengrajinLists as $pengrajin)
+                                        <option value="{{ $pengrajin['id'] }}">{{ $pengrajin['nama_pengrajin'] }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            @error('pengrajinId')
+                            <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="text-center">
+                            <a wire:click="cetakLaporanInvPengrajin" class="btn btn-info"><i class="bi bi-download me-1"></i>Download PDF</a>
+                            <div wire:loading wire:target="cetakLaporanInvPengrajin">
+                                <img width="60" height="60" src="{{ url(env('APP_ASSET_URL') . '/img/loading.gif') }}" alt="Loading...">
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
+
 
         </section>
 
 
     </main><!-- End #main -->
+    <script>
+        (function() {
+            let ss2 = null;
+
+            function initSlim2() {
+                const el = document.getElementById('selectPengrajin');
+                if (!el) return;
+
+                if (ss2 && typeof ss.destroy === 'function') {
+                    ss2.destroy();
+                    ss2 = null;
+                }
+                ss2 = new SlimSelect({
+                    select: el
+                });
+            }
+
+            document.addEventListener('DOMContentLoaded', initSlim2);
+
+            window.addEventListener('init-slim-select2', () => {
+                requestAnimationFrame(initSlim2);
+            });
+        })();
+    </script>
 
     <livewire:PartialView.App.Footer />
 </div>

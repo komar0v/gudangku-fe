@@ -19,13 +19,46 @@ class Index extends Component
     #[Title('Reports')]
 
     public $dateBulanan, $dateHarian;
-    public $inventoryReportData;
+    public $inventoryReportData, $pengrajinLists;
     public $subject;
+    public $startDatePeng, $endDatePeng, $pengrajinId;
 
     public function mount()
     {
+        $this->dispatch('init-slim-select2');
         if (! $this->ensureAuthenticated()) {
             return;
+        }
+
+        try {
+            $client = new Client(['base_uri' => env('API_URL')]);
+
+            $resPengrajin = $client->get('/api/pengrajin-all-lite', [
+                'headers' => [
+                    'Accept' => 'application/json',
+                    'Authorization' => 'Bearer ' . session('auth_data.token')
+                ],
+            ]);
+
+            $this->pengrajinLists = json_decode($resPengrajin->getBody()->getContents(), true);
+        } catch (RequestException $e) {
+            if ($e->hasResponse()) {
+                $response = $e->getResponse();
+                $body = json_decode($response->getBody()->getContents());
+
+                if ($response->getStatusCode() == 403) {
+                    //Forbidden
+                    session()->flash('error_message', 'Forbidden.');
+                    $this->redirectRoute('appDashboardPage');
+                    return;
+                } else if ($response->getStatusCode() == 422) {
+                    session()->flash('error_message', $body->message);
+                    return;
+                } else {
+                    dd($body);
+                }
+            }
+            throw $e;
         }
     }
 
@@ -80,7 +113,7 @@ class Index extends Component
 
         // dd($data);
 
-        $stream_PDF = PDF::loadView('livewire/app/reports/laporanInventory', $data)->setPaper('A4', 'portrait');
+        $stream_PDF = PDF::loadView('livewire/app/reports/laporanInventory', $data)->setPaper('A4', 'landscape');
         return response()->streamDownload(function () use ($stream_PDF) {
             echo $stream_PDF->stream();
         }, 'laporanArusBarang_' . $this->dateBulanan . '.pdf');
@@ -145,9 +178,77 @@ class Index extends Component
             'inventoryReportData' => $this->inventoryReportData
         ];
 
-        $stream_PDF = PDF::loadView('livewire/app/reports/laporanInventory', $data)->setPaper('A4', 'portrait');
+        $stream_PDF = PDF::loadView('livewire/app/reports/laporanInventory', $data)->setPaper('A4', 'landscape');
         return response()->streamDownload(function () use ($stream_PDF) {
             echo $stream_PDF->stream();
         }, 'laporanArusBarang_' . $this->dateHarian . '.pdf');
+    }
+
+    public function cetakLaporanInvPengrajin()
+    {
+        $this->validate([
+            'startDatePeng' => 'required',
+            'endDatePeng' => 'required',
+            'pengrajinId' => 'required'
+        ]);
+
+        $data = [
+            'start_date' => $this->startDatePeng,
+            'end_date' => $this->endDatePeng,
+            'pengrajinId' => $this->pengrajinId,
+        ];
+
+        try {
+            $client = new Client(['base_uri' => env('API_URL')]);
+
+            $res1 = $client->get('/api/reports/inventory-pengrajin/' . $data['pengrajinId'] . '/range?start_date=' . $data['start_date'] . '&end_date=' . $data['end_date'], [
+                'headers' => [
+                    'Accept' => 'application/json',
+                    'Authorization' => 'Bearer ' . session('auth_data.token')
+                ],
+            ]);
+
+            $this->inventoryReportData = json_decode($res1->getBody()->getContents(), true);
+        } catch (RequestException $e) {
+            if ($e->hasResponse()) {
+                $response = $e->getResponse();
+                $body = json_decode($response->getBody()->getContents());
+
+                if ($response->getStatusCode() == 403) {
+                    //Forbidden
+                    session()->flash('error_message', 'Forbidden.');
+                    $this->redirectRoute('appDashboardPage');
+                    return;
+                } else if ($response->getStatusCode() == 422) {
+                    session()->flash('error_message', $body->message);
+                    return;
+                } else {
+                    dd($body);
+                }
+            }
+            throw $e;
+        }
+
+        $periodeApi = $this->inventoryReportData['data']['periode'];
+        [$start, $end] = explode(' s/d ', $periodeApi);
+
+        $startFormatted = IndoDateFormat::formatIndo($start); // 01 September 2025
+        $endFormatted   = IndoDateFormat::formatIndo($end);   // 14 September 2025
+
+        $periode = $startFormatted . ' s/d ' . $endFormatted;
+
+        $data = [
+            'periode' => $periode,
+            'subject' => 'Laporan Transaksi Pengrajin',
+            'namaPengrajin'=>$this->inventoryReportData['data']['nama_pengrajin'],
+            'namaAdmin' => session('auth_data.accountdata.fullname'),
+            'printedOn' => now('Asia/Jakarta')->toDateTimeString(),
+            'inventoryReportData' => $this->inventoryReportData
+        ];
+
+        $stream_PDF = PDF::loadView('livewire/app/reports/laporanInventoryPerPengrajin', $data)->setPaper('A4', 'landscape');
+        return response()->streamDownload(function () use ($stream_PDF) {
+            echo $stream_PDF->stream();
+        }, 'laporanTransaksiPengrajin_' . $data['namaPengrajin'] .'_'.$startFormatted.'-'.$endFormatted.'.pdf');
     }
 }

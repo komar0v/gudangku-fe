@@ -125,8 +125,8 @@
                     <strong>Disiapkan oleh:</strong> {{ $namaAdmin }}
                 </td>
                 <td class="right" style="border:none;">
-                    <b>Total Ambil:</b> {{ $inventoryReportData['grand_total_ambil'] }}<br>
-                    <b>Total Kembali:</b> {{ $inventoryReportData['grand_total_kembali'] }}
+                    <b>Pengrajin:</b> {{ $namaPengrajin }}<br>
+                    <b>Total Upah:</b> Rp. {{ number_format($inventoryReportData['data']['total_upah'], 0, ',', '.') }}
                 </td>
             </tr>
         </table>
@@ -135,77 +135,54 @@
     <table class="data-table" width="100%" cellspacing="0" cellpadding="5">
         <thead>
             <tr>
-                <th>Kategori</th>
+                <th>No</th>
+                <th>TRX ID</th>
                 <th>Nama Barang</th>
-                <th>Stok Sekarang</th>
-                <th>Total Ambil</th>
-                <th>Total Kembali</th>
-                <th>Log</th>
+                <th>Tgl Ambil</th>
+                <th>Jumlah Ambil</th>
+                <th>Tgl Kembali</th>
+                <th>Jumlah Kembali</th>
+                <th>Upah</th>
+                <th>Status</th>
             </tr>
         </thead>
         <tbody>
-            @foreach($inventoryReportData['items'] as $item)
+            @foreach ($inventoryReportData['data']['transaksi'] as $i => $trx)
             <tr>
-                <td>{{ $item['kategori'] }}</td>
-                <td>{{ $item['nama_barang'] }}</td>
-                <td style="text-align:right; font-weight:bold;">
-                    {{ $item['stok_sekarang'] }}
-                </td>
-                <td>{{ $item['total_ambil'] }}</td>
-                <td>{{ $item['total_kembali'] }}</td>
+                <td>{{ $i + 1 }}</td>
+                <td>{{ $trx['trx_id'] }}</td>
+                <td>{{ $trx['nama_barang'] }}</td>
+                <td>{{ \App\Helpers\IndoDateFormat::formatIndo($trx['tanggal_ambil']) }}</td>
+                <td>{{ $trx['jumlah_ambil'] }}</td>
                 <td>
-                    @if(!empty($item['logs']))
-                    <table width="100%" border="0" cellspacing="0" cellpadding="3" style="border-collapse: collapse; margin-top:5px;">
-                        <thead>
-                            <tr style="background:#f2f2f2;">
-                                <th style="border:1px solid #000;">Tanggal</th>
-                                <th style="border:1px solid #000;">Pengrajin</th>
-                                <th style="border:1px solid #000;">Jenis</th>
-                                <th style="border:1px solid #000;">Qty</th>
-                                <th style="border:1px solid #000;">Keterangan</th>
-                                <th style="border:1px solid #000;">Trx ID</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($item['logs'] as $log)
-                            <tr>
-                                <td style="border:1px solid #000;">
-                                    {{ \Carbon\Carbon::parse($log['tanggal'])->format('d-m-Y H:i') }}
-                                </td>
-                                <td style="border:1px solid #000;">
-                                    {{ $log['nama_pengrajin'] }}
-                                </td>
-                                <td style="border:1px solid #000; text-align:center;">
-                                    @if($log['type'] === 'in')
-                                    <span style="background:#28a745; color:#fff; padding:2px 6px; border-radius:3px;">IN</span>
-                                    @elseif($log['type'] === 'out')
-                                    <span style="background:#ffc107; color:#000; padding:2px 6px; border-radius:3px;">OUT</span>
-                                    @elseif($log['type'] === 'set')
-                                    <span style="background:#6c757d; color:#fff; padding:2px 6px; border-radius:3px;">SET</span>
-                                    @else
-                                    {{ strtoupper($log['type']) }}
-                                    @endif
-                                </td>
-                                <td style="border:1px solid #000; text-align:right;">
-                                    {{ $log['quantity'] }}
-                                </td>
-                                <td style="border:1px solid #000;">
-                                    {{ $log['keterangan'] }}
-                                </td>
-                                <td style="border:1px solid #000; text-align:center;">
-                                    {{ $log['trx_id'] ?? '-' }}
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                    @if($trx['tanggal_kembali'] === 'BELUM KEMBALI')
+                    <span style="color:#fff; background-color:#dc3545; padding:2px 6px; border-radius:4px; font-size:12px;">
+                        BELUM KEMBALI
+                    </span>
                     @else
-                    <em>Tidak ada log</em>
+                    {{ \App\Helpers\IndoDateFormat::formatIndo($trx['tanggal_kembali']) }}
+                    @endif
+                </td>
+                <td>{{ $trx['jumlah_kembali'] != 0 ? $trx['jumlah_kembali'] : '-' }}</td>
+                <td>Rp. {{ number_format($trx['upah'], 0, ',', '.') }}</td>
+                <td>
+                    @if($trx['status'] === 'SELESAI')
+                    <span style="color:#fff; background-color:#28a745; padding:2px 6px; border-radius:4px; font-size:12px;">
+                        SELESAI
+                    </span>
+                    @else
+                    {{ $trx['status'] }}
                     @endif
                 </td>
             </tr>
             @endforeach
         </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="8" style="text-align:right; font-weight:bold;">Total Upah</td>
+                <td style="font-weight:bold;">Rp. {{ number_format($inventoryReportData['data']['total_upah'], 0, ',', '.') }}</td>
+            </tr>
+        </tfoot>
     </table>
 
 

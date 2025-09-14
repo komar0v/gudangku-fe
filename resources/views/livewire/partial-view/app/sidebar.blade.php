@@ -12,7 +12,7 @@
 
             @if(session('auth_data.accountdata.role_code')=='RL_SA')
             <li class="nav-item">
-                <a wire:navigate class="nav-link {{ request()->routeIs('appAddItemPage')||request()->routeIs('appItemDetailsPage')||request()->routeIs('appShowAllItemsPage')||request()->routeIs('appUnitDetailPage')||request()->routeIs('appUnitRegisterPage')||request()->routeIs('appCategoryDetailPage')||request()->routeIs('appCategoryRegisterPage')||request()->routeIs('appInventoryIndexPage') ? '' : 'collapsed' }}" href="{{route('appInventoryIndexPage')}}">
+                <a wire:navigate class="nav-link {{ request()->routeIs('appItemInOutNonPengrajinPage')||request()->routeIs('appAddItemPage')||request()->routeIs('appItemDetailsPage')||request()->routeIs('appShowAllItemsPage')||request()->routeIs('appUnitDetailPage')||request()->routeIs('appUnitRegisterPage')||request()->routeIs('appCategoryDetailPage')||request()->routeIs('appCategoryRegisterPage')||request()->routeIs('appInventoryIndexPage') ? '' : 'collapsed' }}" href="{{route('appInventoryIndexPage')}}">
                     <i class="bx bxs-box"></i>
                     <span>Inventory Master</span>
                 </a>
