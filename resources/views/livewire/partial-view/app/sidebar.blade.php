@@ -28,7 +28,7 @@
             <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('appStatsObserverPage') ? '' : 'collapsed' }}" href="{{route('appStatsObserverPage')}}">
                     <i class="bi bi-file-earmark-bar-graph"></i>
-                    <span>Statistik</span>
+                    <span>Statistik Hari Ini</span>
                 </a>
             </li>
 
@@ -49,7 +49,7 @@
             @endif
 
             <li class="nav-item">
-                <a wire:navigate class="nav-link {{ request()->routeIs('appCreateBlogPage')||request()->routeIs('appManageBlogsPage')||request()->routeIs('appSiteSettingsIndexPage')||request()->routeIs('appLandingPageFooterSettingsPage') ? '' : 'collapsed' }}" href="{{route('appSiteSettingsIndexPage')}}">
+                <a wire:navigate class="nav-link {{ request()->routeIs('appEditImageBlogCoverPage')||request()->routeIs('appEditBlogPage')||request()->routeIs('appCreateBlogPage')||request()->routeIs('appManageBlogsPage')||request()->routeIs('appSiteSettingsIndexPage')||request()->routeIs('appLandingPageFooterSettingsPage') ? '' : 'collapsed' }}" href="{{route('appSiteSettingsIndexPage')}}">
                     <i class="bi bi-tools"></i>
                     <span>Pengaturan Website</span>
                 </a>

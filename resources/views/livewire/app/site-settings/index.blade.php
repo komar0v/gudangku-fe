@@ -29,6 +29,7 @@
                     </div>
                 </div>
 
+                @if(session('auth_data.accountdata.role_code')=='RL_SA')
                 <div class="col-lg-4">
                     <div class="card">
                         <div class="card-body">
@@ -38,9 +39,7 @@
                         </div>
                     </div>
                 </div>
-
-                
-
+                @endif
             </div>
 
         </section>

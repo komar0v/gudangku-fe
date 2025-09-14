@@ -193,6 +193,7 @@
 
                             <script>
                                 document.addEventListener("DOMContentLoaded", () => {
+
                                     const categories = {!! $chart_cat !!};
 
                                     const kembali = {!! $chart_k !!};
@@ -262,11 +263,37 @@
             </div>
             @else
             <div class="row">
-                <div class="col">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title text-center">Coming soon</h5>
-                        </div>
+                <div class="col-4">
+
+                    <div class="card info-card sales-card">
+                        <a href="{{route('appItemInPage')}}">
+                            <div class="card-body">
+                                <h5 class="card-title text-center">Input Pengembalian</h5>
+
+                                <div class="d-flex align-items-center justify-content-center">
+                                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                        <i class="ri ri-arrow-right-down-fill"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="col-4">
+
+                    <div class="card info-card revenue-card">
+                        <a href="{{route('appItemOutPage')}}">
+                            <div class="card-body">
+                                <h5 class="card-title text-center">Input Pengambilan</h5>
+
+                                <div class="d-flex align-items-center justify-content-center">
+                                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                        <i class="ri ri-arrow-left-up-fill"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
                     </div>
                 </div>
             </div>
