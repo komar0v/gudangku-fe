@@ -137,6 +137,22 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="col-lg-6">
+
+                    <div class="card info-card sales-card">
+
+                        <div class="card-body">
+                            <h5 class="card-title">Laporan Keuangan/Cashflow</h5>
+                            <p>Lihat laporan keuangan secara lengkap</p>
+
+                            <div class="text-center">
+                                <a wire:navigate href="{{route('appHistoryCashflowPage')}}" class="btn btn-info"><i class="bi bi-card-list me-1"></i>Lihat Laporan</a>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
 

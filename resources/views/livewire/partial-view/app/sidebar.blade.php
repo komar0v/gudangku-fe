@@ -12,6 +12,13 @@
 
             @if(session('auth_data.accountdata.role_code')=='RL_SA')
             <li class="nav-item">
+                <a wire:navigate class="nav-link {{ request()->routeIs('appCashflowIndexPage') ? '' : 'collapsed' }}" href="{{route('appCashflowIndexPage')}}">
+                    <i class="bi bi-cash-stack"></i>
+                    <span>Keuangan</span>
+                </a>
+            </li>
+            
+            <li class="nav-item">
                 <a wire:navigate class="nav-link {{ request()->routeIs('appItemInOutNonPengrajinPage')||request()->routeIs('appAddItemPage')||request()->routeIs('appItemDetailsPage')||request()->routeIs('appShowAllItemsPage')||request()->routeIs('appUnitDetailPage')||request()->routeIs('appUnitRegisterPage')||request()->routeIs('appCategoryDetailPage')||request()->routeIs('appCategoryRegisterPage')||request()->routeIs('appInventoryIndexPage') ? '' : 'collapsed' }}" href="{{route('appInventoryIndexPage')}}">
                     <i class="bx bxs-box"></i>
                     <span>Inventory Master</span>
@@ -39,13 +46,13 @@
                 </a>
             </li>
 
-
             <li class="nav-item">
                 <a wire:navigate class="nav-link {{ request()->routeIs('appDetailUserPage')||request()->routeIs('appManageUserPage')||request()->routeIs('appRegisterUserPage') ? '' : 'collapsed' }}" href="{{route('appManageUserPage')}}">
                     <i class="bi bi-people-fill"></i>
                     <span>Kelola Pengguna</span>
                 </a>
             </li>
+            
             @endif
 
             <li class="nav-item">

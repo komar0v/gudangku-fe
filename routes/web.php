@@ -36,6 +36,15 @@ use App\Livewire\App\Inventory\Stocks\UpdateStock as UpdateStocksPage;
 use App\Livewire\App\Reports\Index as ReportPage;
 use App\Livewire\App\Reports\Graph as GraphReportPage;
 
+use App\Livewire\App\Cashflow\Index as CashflowIndexPage;
+use App\Livewire\App\Cashflow\CashflowCategory\ManageCategory as ManageCashflowCategoryPage;
+use App\Livewire\App\Cashflow\CashflowCategory\AddCategory as AddCashflowCategoryPage;
+use App\Livewire\App\Cashflow\CashflowCategory\EditCategory as EditCashflowCategoryPage;
+
+use App\Livewire\App\Cashflow\CatatBaru as CreateCashflowPage;
+use App\Livewire\App\Cashflow\Details as DetailCashflowPage;
+use App\Livewire\App\Cashflow\FullHistory as HistoryCashflowPage;
+
 use App\Livewire\App\Supplier\Details as SupplierDetailPage;
 use App\Livewire\App\Supplier\VisitHistory as SupplierVisitLogsPage;
 use App\Livewire\App\Supplier\Edit as SupplierEditDataPage;
@@ -108,6 +117,15 @@ Route::get('/app/pengrajin/barcode/scan', SupplierSearchByBarcodePage::class)->n
 
 Route::get('/app/report', ReportPage::class)->name('appReportPage');
 Route::get('/app/report/graph/{date}', GraphReportPage::class)->name('appGraphReportPage');
+
+Route::get('/app/cashflow', CashflowIndexPage::class)->name('appCashflowIndexPage');
+Route::get('/app/cashflow/create', CreateCashflowPage::class)->name('appCreateCashflowPage');
+Route::get('/app/cashflow/{cashflowId}/details', DetailCashflowPage::class)->name('appDetailCashflowPage');
+Route::get('/app/cashflow/history', HistoryCashflowPage::class)->name('appHistoryCashflowPage');
+
+Route::get('/app/cashflow/manage-categories', ManageCashflowCategoryPage::class)->name('appManageCashflowCategoryPage');
+Route::get('/app/cashflow/manage-categories/create', AddCashflowCategoryPage::class)->name('appAddCashflowCategoryPage');
+Route::get('/app/cashflow/manage-categories/{cashflowCatId}/edit', EditCashflowCategoryPage::class)->name('appEditCashflowCategoryPage');
 
 Route::get('/app/inventory/transaction/pengambilan', PengambilanPage::class)->name('appItemOutPage');
 Route::get('/app/inventory/transaction/pengembalian', PengembalianPage::class)->name('appItemInPage');
