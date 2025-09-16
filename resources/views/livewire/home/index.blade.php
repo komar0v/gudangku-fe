@@ -34,7 +34,7 @@
                     </div>
                     <div class="col-lg-6">
                         <div class="hero-image" data-aos="zoom-out" data-aos-delay="300">
-                            <img src="assets/img/about/about-21.webp" alt="Consulting Services" class="img-fluid">
+                            <img src="{{ url(env('ASSET_URL') . 'assets/img/about/empingmelinjo.png') }}" class="img-fluid">
                         </div>
                     </div>
                 </div>
@@ -56,7 +56,7 @@
                     <div class="col-lg-6" data-aos="fade-up" data-aos-delay="200">
                         <div class="steps-content">
                             <div class="hero-image" data-aos="zoom-out" data-aos-delay="300">
-                                <img src="assets/img/about/about-21.webp" alt="Consulting Services" class="img-fluid">
+                                <img src="{{ url(env('ASSET_URL') . 'assets/img/about/emping.jpg') }}" class="img-fluid">
                             </div>
 
                         </div>

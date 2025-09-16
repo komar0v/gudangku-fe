@@ -3,8 +3,8 @@
 
         <div class="d-flex align-items-center justify-content-between">
             <a href="index.html" class="logo d-flex align-items-center">
-                <img src="{{ url(env('APP_ASSET_URL') . '/img/noun-inventory-management-2825346.png') }}" alt="">
-                <span class="d-none d-lg-block">GudangKu</span>
+                <img src="{{ url(env('APP_ASSET_URL') . '/img/empingmerapi.png') }}" alt="">
+                <span class="d-none d-lg-block">Emping Merapi</span>
             </a>
             <i class="bi bi-list toggle-sidebar-btn"></i>
         </div><!-- End Logo -->
