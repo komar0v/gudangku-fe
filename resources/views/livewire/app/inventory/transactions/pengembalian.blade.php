@@ -10,7 +10,7 @@
     <main id="main" class="main">
 
         <div class="pagetitle">
-            <h1>Transaksi Pengembalian</h1>
+            <h1>Transaksi Pengembalian (Kembali)</h1>
             <nav>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="{{route('appDashboardPage')}}">Home</a></li>
@@ -72,7 +72,7 @@
                                     <div class="col-lg-3 col-md-4 label ">Transaksi</div>
                                     <div class="col-lg-9 col-md-8" wire:ignore>
 
-                                        <select id="selectTrx" wire:model="transactionId" style="width:100%;"
+                                        <select id="selectTrx" wire:model="transactionId" wire:change="calculateUpah" style="width:100%;"
                                             wire:key="selectTrx-{{ count($transactionListLite) }}">
                                             <option value="">-Pilih Transaksi-</option>
                                             @foreach ($transactionListLite as $trx)
@@ -84,6 +84,29 @@
 
                                     </div>
                                     @error('transactionId')
+                                    <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="row pt-4">
+                                    <div class="col-lg-3 col-md-4 label ">Upah (Harga barang X berat ambil)</div>
+                                    <div class="col-lg-9 col-md-8"><b>Rp. {{number_format($upah??0, 0, ',', '.')}}</b></div>
+                                </div>
+
+                                <div class="row pt-4">
+                                    <div class="col-lg-3 col-md-4 label ">Barang Kembali</div>
+                                    <div class="col-lg-9 col-md-8" wire:ignore>
+
+                                        <select id="selectItem" wire:model="itemId" style="width:100%;"
+                                            wire:key="selectItem-{{ count($inventoryItemList) }}">
+                                            <option value="">-Pilih Barang-</option>
+                                            @foreach ($inventoryItemList as $item)
+                                            <option value="{{ $item['id'] }}">{{ $item['nama_kategori'] }} | {{ $item['nama_barang'] }}</option>
+                                            @endforeach
+                                        </select>
+
+                                    </div>
+                                    @error('itemId')
                                     <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
@@ -133,6 +156,7 @@
                                         <th scope="col">Berat Ambil</th>
                                         <th scope="col">Tanggal Kembali</th>
                                         <th scope="col">Berat Kembali</th>
+                                        <th scope="col"> </th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -156,6 +180,9 @@
                                             @else
                                             <span class="text-danger">BELUM ADA</span>
                                             @endif
+                                        </td>
+                                        <td>
+                                            <a target="_blank" href="{{route('appTransactionDetails', ['transactionId'=> $transactData['id']])}}">Detail</a>
                                         </td>
                                     </tr>
                                     @endforeach
@@ -181,7 +208,13 @@
 
             Html5Qrcode.getCameras().then(devices => {
                 if (devices && devices.length) {
-                    const cameraId = devices[0].id;
+                    // cari kamera belakang
+                    let backCamera = devices.find(d =>
+                        d.label.toLowerCase().includes("back") ||
+                        d.label.toLowerCase().includes("environment")
+                    );
+
+                    const cameraId = backCamera ? backCamera.id : devices[0].id;
 
                     html5QrCode.start(
                         cameraId, {
@@ -189,12 +222,11 @@
                             qrbox: 250
                         },
                         qrCodeMessage => {
-                            // alert("Scan berhasil: " + qrCodeMessage);
                             document.getElementById('qrResult').value = qrCodeMessage;
                             document.getElementById('qrResult').dispatchEvent(new Event('input'));
                         },
                         errorMessage => {
-                            // optional error
+                            // optional error log
                         }
                     ).then(() => {
                         cameraLoading.style.display = "none";
@@ -213,28 +245,32 @@
 
     <script>
         (function() {
-            let ss = null;
+            let ssTrx = null;
+            let ssItem = null;
 
             function initSlim() {
-                const el = document.getElementById('selectTrx');
-                if (!el) return;
+                const trxEl = document.getElementById('selectTrx');
+                const itemEl = document.getElementById('selectItem');
 
-                // kalau sudah pernah init, hancurkan dulu biar tidak dobel
-                if (ss && typeof ss.destroy === 'function') {
-                    ss.destroy();
-                    ss = null;
+                if (trxEl) {
+                    if (ssTrx && typeof ssTrx.destroy === 'function') ssTrx.destroy();
+                    ssTrx = new SlimSelect({
+                        select: trxEl
+                    });
                 }
-                ss = new SlimSelect({
-                    select: el
-                });
+
+                if (itemEl) {
+                    if (ssItem && typeof ssItem.destroy === 'function') ssItem.destroy();
+                    ssItem = new SlimSelect({
+                        select: itemEl
+                    });
+                }
             }
 
-            // inisialisasi awal (kalau select sudah ada saat load)
             document.addEventListener('DOMContentLoaded', initSlim);
 
-            // dengar browser event dari Livewire v3
+            // Livewire event
             window.addEventListener('init-slim-select', () => {
-                // pastikan dijalankan SETELAH Livewire selesai patch DOM
                 requestAnimationFrame(initSlim);
             });
         })();

@@ -19,7 +19,7 @@ class Details extends Component
 
     public $pengrjnId;
     public $transactionData;
-    public $kategoriData, $satuanData, $pengrajinData;
+    public $kategoriDataAmbil, $kategoriDataKembali, $satuanData, $pengrajinData;
     public $waktuPengambilan, $waktuPengembalian;
 
     public function mount($transactionId)
@@ -47,15 +47,23 @@ class Details extends Component
                     'Authorization' => 'Bearer ' . session('auth_data.token')
                 ],
             ]);
-            $this->kategoriData = json_decode($res2->getBody()->getContents(), true);
+            $this->kategoriDataAmbil = json_decode($res2->getBody()->getContents(), true);
 
             if (!empty($this->transactionData['timestamp_pengambilan'])) {
 
-                $this->waktuPengambilan = IndoDateFormat::formatIndo($this->transactionData['timestamp_pengambilan']);
+                $this->waktuPengambilan = IndoDateFormat::formatIndoNonUTC($this->transactionData['timestamp_pengambilan']);
             }
 
             if (!empty($this->transactionData['timestamp_pengembalian'])) {
-                $this->waktuPengembalian = IndoDateFormat::formatIndo($this->transactionData['timestamp_pengembalian']);
+                $this->waktuPengembalian = IndoDateFormat::formatIndoNonUTC($this->transactionData['timestamp_pengembalian']);
+
+                $res5 = $client->get('/api/category/get-details-lite/' . $this->transactionData['item_pengembalian']['kategori_id'], [
+                    'headers' => [
+                        'Accept' => 'application/json',
+                        'Authorization' => 'Bearer ' . session('auth_data.token')
+                    ],
+                ]);
+                $this->kategoriDataKembali = json_decode($res5->getBody()->getContents(), true);
             }
 
             $res3 = $client->get('/api/satuan-barang/get-details-lite/' . $this->transactionData['item']['satuan_id'], [

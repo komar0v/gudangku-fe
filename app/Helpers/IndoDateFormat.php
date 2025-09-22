@@ -14,6 +14,12 @@ class IndoDateFormat
             ->translatedFormat('d F Y H:i') . ' WIB';
     }
 
+    public static function formatIndoNonUTC(string $timestamp){
+        return Carbon::parse($timestamp)
+        ->locale('id')
+        ->translatedFormat('d F Y H:i') . ' WIB';
+    }
+
     public static function formatTanggalIndo(string $isoTime)
     {
         return Carbon::parse($isoTime, 'UTC')

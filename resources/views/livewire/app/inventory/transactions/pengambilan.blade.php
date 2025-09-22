@@ -10,7 +10,7 @@
     <main id="main" class="main">
 
         <div class="pagetitle">
-            <h1>Transaksi Pengambilan</h1>
+            <h1>Transaksi Pengambilan (Ambil)</h1>
             <nav>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="{{route('appDashboardPage')}}">Home</a></li>
@@ -122,8 +122,9 @@
 
                             <div wire:loading.remove wire:target="cekStok">
                                 @if(!empty($stokData))
-                                <p><strong>Nama Barang :</strong> {{ $stokData['nama_barang']??'0' }}</p>
                                 <p><strong>Kategori :</strong> {{ $stokData['nama_kategori']??'0' }}</p>
+                                <p><strong>Nama Barang :</strong> {{ $stokData['nama_barang']??'0' }}</p>
+                                <p><strong>Harga :</strong> Rp. {{ number_format($stokData['harga'], 0, ',', '.') }}</p>
                                 <p><strong>Stok :</strong> {{ $stokData['quantity']??'0' }} {{ $stokData['kode_satuan']??'' }}</p>
                                 @else
                                 <p>Silakan pilih barang untuk melihat stok.</p>
@@ -152,7 +153,13 @@
 
             Html5Qrcode.getCameras().then(devices => {
                 if (devices && devices.length) {
-                    const cameraId = devices[0].id;
+                    // cari kamera belakang
+                    let backCamera = devices.find(d =>
+                        d.label.toLowerCase().includes("back") ||
+                        d.label.toLowerCase().includes("environment")
+                    );
+
+                    const cameraId = backCamera ? backCamera.id : devices[0].id;
 
                     html5QrCode.start(
                         cameraId, {
@@ -160,12 +167,11 @@
                             qrbox: 250
                         },
                         qrCodeMessage => {
-                            // alert("Scan berhasil: " + qrCodeMessage);
                             document.getElementById('qrResult').value = qrCodeMessage;
                             document.getElementById('qrResult').dispatchEvent(new Event('input'));
                         },
                         errorMessage => {
-                            // optional error
+                            // optional error log
                         }
                     ).then(() => {
                         cameraLoading.style.display = "none";

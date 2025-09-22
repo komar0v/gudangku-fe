@@ -27,12 +27,12 @@
 
                             <div class="row">
                                 <div class="col">
-                                    <h5 class="card-title">Data Barang</h5>
+                                    <h5 class="card-title">Data Barang Ambil</h5>
 
                                     <div class="row mb-3">
                                         <label class="col-sm-4 col-form-label">Kategori Barang</label>
                                         <div class="col-sm-4 mt-2">
-                                            <p>{{$kategoriData['nama_kategori']}}</p>
+                                            <p>{{$kategoriDataAmbil['nama_kategori']}}</p>
                                         </div>
                                     </div>
 
@@ -47,6 +47,30 @@
                                         <label class="col-sm-4 col-form-label">Harga</label>
                                         <div class="col-sm-4 mt-2">
                                             <p>Rp. {{number_format($transactionData['item']['harga'], 0, ',', '.')}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <h5 class="card-title">Data Barang Kembali</h5>
+
+                                    <div class="row mb-3">
+                                        <label class="col-sm-4 col-form-label">Kategori Barang</label>
+                                        <div class="col-sm-4 mt-2">
+                                            <p>{{$kategoriDataKembali['nama_kategori'] ?? "BELUM ADA"}}</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <label class="col-sm-4 col-form-label">Nama Barang</label>
+                                        <div class="col-sm-4 mt-2">
+                                            <p>{{$transactionData['item_pengembalian']['nama_barang'] ?? "BELUM ADA"}}</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <label class="col-sm-4 col-form-label">Harga</label>
+                                        <div class="col-sm-4 mt-2">
+                                            <p>Rp. {{number_format($transactionData['item_pengembalian']['harga']??0, 0, ',', '.')}}</p>
                                         </div>
                                     </div>
                                 </div>

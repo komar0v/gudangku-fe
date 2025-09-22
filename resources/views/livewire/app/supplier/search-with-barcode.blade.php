@@ -51,7 +51,7 @@
                                     <div class="col-6">
                                         <a href="{{ route('appSupplierDetailPage', ['supplierId' => $supplierData['id']]) }}" class="btn btn-info">Detail</a>
                                     </div>
-                                    
+
                                 </div>
                             </div>
 
@@ -77,7 +77,13 @@
 
             Html5Qrcode.getCameras().then(devices => {
                 if (devices && devices.length) {
-                    const cameraId = devices[0].id;
+                    // cari kamera belakang
+                    let backCamera = devices.find(d =>
+                        d.label.toLowerCase().includes("back") ||
+                        d.label.toLowerCase().includes("environment")
+                    );
+
+                    const cameraId = backCamera ? backCamera.id : devices[0].id;
 
                     html5QrCode.start(
                         cameraId, {
@@ -85,12 +91,11 @@
                             qrbox: 250
                         },
                         qrCodeMessage => {
-                            // alert("Scan berhasil: " + qrCodeMessage);
                             document.getElementById('qrResult').value = qrCodeMessage;
                             document.getElementById('qrResult').dispatchEvent(new Event('input'));
                         },
                         errorMessage => {
-                            // optional error
+                            // optional error log
                         }
                     ).then(() => {
                         cameraLoading.style.display = "none";

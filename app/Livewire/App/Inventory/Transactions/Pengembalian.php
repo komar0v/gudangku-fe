@@ -19,9 +19,10 @@ class Pengembalian extends Component
     #[Title('Pengembalian')]
 
     public $successMessage, $errorMessage;
-    public $qrResult = "default", $bulanIni, $transactionId = "", $berat_pengembalian;
+    public $qrResult = "default", $bulanIni, $transactionId = "", $berat_pengembalian, $itemId = "";
     public $pengrajinData;
-    public $transactionList, $transactionListLite;
+    public $transactionList, $transactionListLite, $inventoryItemList;
+    public $upah;
 
     public function mount()
     {
@@ -113,6 +114,7 @@ class Pengembalian extends Component
     {
         return [
             'transactionId' => 'required',
+            'itemId' => 'required',
             'berat_pengembalian' => 'required|numeric',
         ];
     }
@@ -123,6 +125,15 @@ class Pengembalian extends Component
             $client = new Client(['base_uri' => env('API_URL')]);
 
             $date = now()->format('m-Y');
+
+            $res2 = $client->get('/api/inventory/item/get-all-lite', [
+                'headers' => [
+                    'Accept' => 'application/json',
+                    'Authorization' => 'Bearer ' . session('auth_data.token')
+                ],
+            ]);
+
+            $this->inventoryItemList = json_decode($res2->getBody()->getContents(), true)['data'];
 
             $res3 = $client->get('/api/transactions/pengrajin/incomplete-lite/' . $this->qrResult . '?month=' . $date, [
                 'headers' => [
@@ -150,6 +161,51 @@ class Pengembalian extends Component
         }
     }
 
+    public function calculateUpah()
+    {
+        if (!empty($this->transactionId)) {
+            try {
+                $client = new Client(['base_uri' => env('API_URL')]);
+
+                $resTrxDetails = $client->get('/api/transactions/' . $this->transactionId . '/details', [
+                    'headers' => [
+                        'Accept' => 'application/json',
+                        'Authorization' => 'Bearer ' . session('auth_data.token')
+                    ]
+                ]);
+
+                $responseData = json_decode($resTrxDetails->getBody()->getContents(), true);
+
+                $this->upah = $responseData['berat_pengambilan'] * $responseData['item']['harga'];
+            } catch (RequestException $e) {
+                if ($e->hasResponse()) {
+                    $response = $e->getResponse();
+                    $body = json_decode($response->getBody()->getContents());
+
+                    if ($response->getStatusCode() == 400) {
+
+                        session()->flash('error_message', $body->message);
+                        $this->errorMessage = $body->message;
+                        return;
+                    } else if ($response->getStatusCode() == 422) {
+
+                        session()->flash('error_message', $body->message);
+                        $this->errorMessage = $body->message;
+                        return;
+                    } else if ($response->getStatusCode() == 404) {
+
+                        session()->flash('error_message', "Transaksi tidak ditemukan");
+                        $this->errorMessage = $body->message;
+                        return;
+                    } else {
+                        dd($body);
+                    }
+                }
+                throw $e;
+            }
+        }
+    }
+
     public function savePengembalian()
     {
         $this->validate();
@@ -157,6 +213,7 @@ class Pengembalian extends Component
         $trx_id = $this->transactionId;
 
         $data = [
+            'item_id_pengembalian' => $this->itemId,
             'berat_pengembalian' => $this->berat_pengembalian,
         ];
 
