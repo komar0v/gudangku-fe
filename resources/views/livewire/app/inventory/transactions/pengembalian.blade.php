@@ -146,7 +146,7 @@
                 <div class="col">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">Transaksi Pengrajin {{$pengrajinData['nama_pengrajin']}} Pada bulan {{$bulanIni}}</h5>
+                            <h5 class="card-title">Transaksi Pengrajin {{$pengrajinData['nama_pengrajin']}}</h5>
 
                             <table class="table table-sm">
                                 <thead>

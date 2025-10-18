@@ -83,8 +83,7 @@ class Pengembalian extends Component
         try {
             $client = new Client(['base_uri' => env('API_URL')]);
 
-            $date = now()->format('m-Y');
-            $res2 = $client->get('/api/transactions/pengrajin/' . $this->qrResult . '?month=' . $date, [
+            $res2 = $client->get('/api/transactions/pengrajin/' . $this->qrResult, [
                 'headers' => [
                     'Accept' => 'application/json',
                     'Authorization' => 'Bearer ' . session('auth_data.token')
@@ -124,8 +123,6 @@ class Pengembalian extends Component
         try {
             $client = new Client(['base_uri' => env('API_URL')]);
 
-            $date = now()->format('m-Y');
-
             $res2 = $client->get('/api/inventory/item/get-all-lite', [
                 'headers' => [
                     'Accept' => 'application/json',
@@ -135,7 +132,7 @@ class Pengembalian extends Component
 
             $this->inventoryItemList = json_decode($res2->getBody()->getContents(), true)['data'];
 
-            $res3 = $client->get('/api/transactions/pengrajin/incomplete-lite/' . $this->qrResult . '?month=' . $date, [
+            $res3 = $client->get('/api/transactions/pengrajin/incomplete-lite/' . $this->qrResult, [
                 'headers' => [
                     'Accept' => 'application/json',
                     'Authorization' => 'Bearer ' . session('auth_data.token')
