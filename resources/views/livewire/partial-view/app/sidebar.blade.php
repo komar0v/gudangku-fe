@@ -11,6 +11,14 @@
             </li><!-- End Dashboard Nav -->
 
             @if(session('auth_data.accountdata.role_code')=='RL_SA')
+            
+            <li class="nav-item">
+                <a wire:navigate class="nav-link {{ request()->routeIs('appOverdueTransactions') ? '' : 'collapsed' }}" href="{{route('appOverdueTransactions')}}">
+                    <i class="bi bi-exclamation-octagon-fill"></i>
+                    <span>Barang Belum Kembali</span>
+                </a>
+            </li>
+
             <li class="nav-item">
                 <a wire:navigate class="nav-link {{ request()->routeIs('appCashflowIndexPage') ? '' : 'collapsed' }}" href="{{route('appCashflowIndexPage')}}">
                     <i class="bi bi-cash-stack"></i>

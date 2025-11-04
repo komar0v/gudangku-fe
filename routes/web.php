@@ -28,6 +28,7 @@ use App\Livewire\App\Inventory\Transactions\Pengambilan as PengambilanPage;
 use App\Livewire\App\Inventory\Transactions\Pengembalian as PengembalianPage;
 use App\Livewire\App\Inventory\Transactions\Details as TranxDetailPage;
 use App\Livewire\App\Inventory\Transactions\Edit as TranxEditPage;
+use App\Livewire\App\Inventory\Transactions\Overdue as TranxOverduePage;
 
 use App\Livewire\App\Inventory\Stocks\PantauStokBarang as StockStatisticsPage;
 use App\Livewire\App\Inventory\Stocks\ShowAll as AllStocksPage;
@@ -131,6 +132,7 @@ Route::get('/app/inventory/transaction/pengambilan', PengambilanPage::class)->na
 Route::get('/app/inventory/transaction/pengembalian', PengembalianPage::class)->name('appItemInPage');
 Route::get('/app/inventory/transaction/{transactionId}/details', TranxDetailPage::class)->name('appTransactionDetails');
 Route::get('/app/inventory/transaction/{transactionId}/edit', TranxEditPage::class)->name('appTransactionEdit');
+Route::get('/app/inventory/transaction/overdue', TranxOverduePage::class)->name('appOverdueTransactions');
 
 Route::get('/app/site-settings', SiteSettingsIndexPage::class)->name('appSiteSettingsIndexPage');
 Route::get('/app/site-settings/landing-page-footer', LandingPageFooterSettingsPage::class)->name('appLandingPageFooterSettingsPage');
