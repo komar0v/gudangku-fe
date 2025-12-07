@@ -160,6 +160,9 @@
 
                 if (chart) chart.destroy();
 
+                let dynamicHeight = ranking.length * 40;
+                if (dynamicHeight < 400) dynamicHeight = 400;
+
                 chart = new ApexCharts(el, {
                     series: [{
                         name: "Total Transaksi Selesai",
@@ -167,7 +170,7 @@
                     }],
                     chart: {
                         type: 'bar',
-                        height: 350
+                        height: dynamicHeight
                     },
                     plotOptions: {
                         bar: {
