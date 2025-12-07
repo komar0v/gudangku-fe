@@ -36,6 +36,7 @@ use App\Livewire\App\Inventory\Stocks\UpdateStock as UpdateStocksPage;
 
 use App\Livewire\App\Reports\Index as ReportPage;
 use App\Livewire\App\Reports\Graph as GraphReportPage;
+use App\Livewire\App\Reports\Ranking as RankReportPage;
 
 use App\Livewire\App\Cashflow\Index as CashflowIndexPage;
 use App\Livewire\App\Cashflow\CashflowCategory\ManageCategory as ManageCashflowCategoryPage;
@@ -118,6 +119,7 @@ Route::get('/app/pengrajin/barcode/scan', SupplierSearchByBarcodePage::class)->n
 
 Route::get('/app/report', ReportPage::class)->name('appReportPage');
 Route::get('/app/report/graph/{date}', GraphReportPage::class)->name('appGraphReportPage');
+Route::get('/app/report/ranks', RankReportPage::class)->name('appRankReportPage');
 
 Route::get('/app/cashflow', CashflowIndexPage::class)->name('appCashflowIndexPage');
 Route::get('/app/cashflow/create', CreateCashflowPage::class)->name('appCreateCashflowPage');

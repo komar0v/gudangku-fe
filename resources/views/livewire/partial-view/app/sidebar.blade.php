@@ -55,6 +55,13 @@
             </li>
 
             <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('appRankReportPage') ? '' : 'collapsed' }}" href="{{route('appRankReportPage')}}">
+                    <i class="bi bi-trophy-fill"></i>
+                    <span>Ranking Pengrajin</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
                 <a wire:navigate class="nav-link {{ request()->routeIs('appDetailUserPage')||request()->routeIs('appManageUserPage')||request()->routeIs('appRegisterUserPage') ? '' : 'collapsed' }}" href="{{route('appManageUserPage')}}">
                     <i class="bi bi-people-fill"></i>
                     <span>Kelola Pengguna</span>
