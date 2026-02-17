@@ -10,6 +10,27 @@
                 </a>
             </li><!-- End Dashboard Nav -->
 
+            <li class="nav-item">
+                <a wire:navigate class="nav-link {{ request()->routeIs('appSearchTransactions') ? '' : 'collapsed' }}" href="{{route('appSearchTransactions')}}">
+                    <i class="bi bi-search"></i>
+                    <span>Cari Transaksi</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a wire:navigate class="nav-link {{ request()->routeIs('appLatestTransactions') ? '' : 'collapsed' }}" href="{{route('appLatestTransactions')}}">
+                    <i class="bi bi-clock-history"></i>
+                    <span>Transaksi Terbaru</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a wire:navigate class="nav-link {{ request()->routeIs('appHutangStatisticsPage') || request()->routeIs('appHutangDetails')||request()->routeIs('appHutangPengrajinPage') ? '' : 'collapsed' }}" href="{{route('appHutangStatisticsPage')}}">
+                    <i class="bi bi-wallet2"></i>
+                    <span>Hutang Piutang</span>
+                </a>
+            </li>
+
             @if(session('auth_data.accountdata.role_code')=='RL_SA')
             
             <li class="nav-item">

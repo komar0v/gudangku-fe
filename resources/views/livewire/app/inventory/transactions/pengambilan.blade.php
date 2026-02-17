@@ -96,11 +96,18 @@
                                         @enderror
                                     </div>
 
+                                    <div class="col-12 form-check form-switch pt-2">
+                                        <input wire:model="isHutang" class="form-check-input" type="checkbox">
+                                        <label class="form-check-label">TANDAI TRANSAKSI INI TERHUTANG</label>
+                                    </div>
+
                                     <div class="text-center pt-2">
                                         <button type="submit" class="btn btn-primary">Simpan</button>
                                     </div>
                                     @elseif(!empty($pengrajinData))
-                                    <div class="pt-2"><p>Tolong arahkan barcode ke kamera untuk melanjutkan</p></div>
+                                    <div class="pt-2">
+                                        <p>Tolong arahkan barcode ke kamera untuk melanjutkan</p>
+                                    </div>
                                     @endif
                                 </div>
                             </form>

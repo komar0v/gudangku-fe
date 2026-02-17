@@ -29,6 +29,12 @@ use App\Livewire\App\Inventory\Transactions\Pengembalian as PengembalianPage;
 use App\Livewire\App\Inventory\Transactions\Details as TranxDetailPage;
 use App\Livewire\App\Inventory\Transactions\Edit as TranxEditPage;
 use App\Livewire\App\Inventory\Transactions\Overdue as TranxOverduePage;
+use App\Livewire\App\Inventory\Transactions\Search as TranxSearchPage;
+use App\Livewire\App\Inventory\Transactions\Latest as TranxLatestPage;
+
+use App\Livewire\App\HutangPiutang\HutangDetails as HutangDetailPage;
+use App\Livewire\App\HutangPiutang\Statistics as HutangStatisticsPage;
+use App\Livewire\App\HutangPiutang\HutangPengrajin as HutangPengrajinPage;
 
 use App\Livewire\App\Inventory\Stocks\PantauStokBarang as StockStatisticsPage;
 use App\Livewire\App\Inventory\Stocks\ShowAll as AllStocksPage;
@@ -135,6 +141,12 @@ Route::get('/app/inventory/transaction/pengembalian', PengembalianPage::class)->
 Route::get('/app/inventory/transaction/{transactionId}/details', TranxDetailPage::class)->name('appTransactionDetails');
 Route::get('/app/inventory/transaction/{transactionId}/edit', TranxEditPage::class)->name('appTransactionEdit');
 Route::get('/app/inventory/transaction/overdue', TranxOverduePage::class)->name('appOverdueTransactions');
+Route::get('/app/inventory/transaction/search', TranxSearchPage::class)->name('appSearchTransactions');
+Route::get('/app/inventory/transaction/latest', TranxLatestPage::class)->name('appLatestTransactions');
+
+Route::get('/app/hutangpiutang/{transactionId}/details', HutangDetailPage::class)->name('appHutangDetails');
+Route::get('/app/hutangpiutang', HutangStatisticsPage::class)->name('appHutangStatisticsPage');
+Route::get('/app/hutangpiutang/pengrajin', HutangPengrajinPage::class)->name('appHutangPengrajinPage');
 
 Route::get('/app/site-settings', SiteSettingsIndexPage::class)->name('appSiteSettingsIndexPage');
 Route::get('/app/site-settings/landing-page-footer', LandingPageFooterSettingsPage::class)->name('appLandingPageFooterSettingsPage');

@@ -19,6 +19,13 @@
         </div><!-- End Page Title -->
 
         <section class="section">
+            @if(session('success_message'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="bi bi-check-circle me-1"></i>
+                {{ session('success_message') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            @endif
             <a href="{{route('appSupplierVisitLogsPage', ['supplierId'=> $pengrjnId])}}" wire:navigate class="btn btn-secondary btn-sm mb-2"><i class="bi bi-arrow-left me-1"></i>Kembali</a>
             <div class="row">
                 <div class="col">
@@ -94,6 +101,59 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="col-lg-3 col-md-4 col-12">
+                    <div class="card shadow-sm border-0">
+                        <div class="card-body">
+
+                            <h5 class="card-title fw-bold mb-3">
+                                <i class="bi bi-wallet2 me-2"></i>
+                                Data Hutang
+                            </h5>
+
+                            @if($dataHutang['is_hutang'])
+
+                            @if($dataHutang['status'] == 'lunas')
+                            <div class="mb-3">
+                                <span class="badge bg-success px-3 py-2 fs-6">
+                                    <i class="bi bi-check-circle me-1"></i>
+                                    Sudah Lunas
+                                </span>
+                            </div>
+                            @else
+                            <div class="mb-3">
+                                <span class="badge bg-danger px-3 py-2 fs-6">
+                                    <i class="bi bi-exclamation-circle me-1"></i>
+                                    Masih Terhutang
+                                </span>
+                            </div>
+                            @endif
+
+                            <a target="_blank" href="{{ route('appHutangDetails', ['transactionId' => $transactionData['id']]) }}" class="btn btn-outline-primary w-100"><i class="bi bi-eye me-1"></i>Detail Hutang</a>
+
+                            @else
+
+                            <div class="mb-3">
+                                <span class="badge bg-secondary px-3 py-2 fs-6">
+                                    Tidak Ada Hutang
+                                </span>
+                            </div>
+
+                            <button wire:click="markHutang" wire:loading.attr="disabled" class="btn btn-primary w-100">
+                                <i class="bi bi-plus-circle me-1"></i>
+                                Tandai sebagai Terhutang
+
+                                <span wire:loading wire:target="markHutang">
+                                    <span class="spinner-border spinner-border-sm"></span>
+                                </span>
+                            </button>
+
+                            @endif
+
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
             <div class="row">
