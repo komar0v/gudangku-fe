@@ -3,49 +3,52 @@
 namespace App\Livewire\App\HutangPiutang;
 
 use App\Livewire\Traits\RequireLogin;
+use Carbon\Carbon;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 
-class HutangDetails extends Component
+class ScanPengrajin extends Component
 {
     use RequireLogin;
 
     #[Layout('components.layouts.applayout')]
-    #[Title('Debt Details')]
+    #[Title('Scan')]
 
-    public $detailHutang;
-    public $persen = 0;
-    public $jumlah_bayar, $keterangan;
+    public $successMessage, $errorMessage, $bulanIni;
+    public $hutangDatas = null;
+    public $hutangDatasOnCurrentMonth = null;
+    public $qrResult = "default";
+    public $pengrajinData, $listHutangBulanIni;
 
-    public function mount($hutangId)
+    public function mount()
     {
         if (! $this->ensureAuthenticated()) {
             return;
         }
-
-        $this->fetchData($hutangId);
     }
 
-    public function fetchData($hutangId)
+    public function fetchResult()
     {
+        $this->qrResult;
+
         try {
             $client = new Client(['base_uri' => env('API_URL')]);
 
-            $res = $client->get('/api/hutang/' . $hutangId . '/details', [
+            $res1 = $client->get('/api/pengrajin-barcode-search/' . $this->qrResult, [
                 'headers' => [
                     'Accept' => 'application/json',
                     'Authorization' => 'Bearer ' . session('auth_data.token')
                 ],
             ]);
 
-            $this->detailHutang = json_decode($res->getBody()->getContents(), true)['data'];
+            $this->pengrajinData = json_decode($res1->getBody()->getContents(), true);
 
-            $this->persen = ($this->detailHutang['total_hutang'] > 0)
-                ? (($this->detailHutang['total_hutang'] - $this->detailHutang['sisa_hutang']) / $this->detailHutang['total_hutang']) * 100
-                : 0;
+            if ($this->pengrajinData['is_found'] == true) {
+                $this->fetchHutangData($this->qrResult);
+            }
         } catch (RequestException $e) {
             if ($e->hasResponse()) {
                 $response = $e->getResponse();
@@ -56,10 +59,6 @@ class HutangDetails extends Component
                     session()->flash('error_message', 'Forbidden.');
                     $this->redirectRoute('appDashboardPage');
                     return;
-                }else if($response->getStatusCode() == 404){
-                    session()->flash('error_message', 'Not found.');
-                    $this->redirectRoute('appHutangStatisticsPage');
-                    return;
                 } else {
                     dd($body);
                 }
@@ -68,36 +67,31 @@ class HutangDetails extends Component
         }
     }
 
-    public function payDebt()
+    public function fetchHutangData($pengrajinId)
     {
-        $this->validate([
-            'jumlah_bayar' => 'required|numeric|min:1',
-            'keterangan'   => 'nullable|string|max:255'
-        ]);
-
-        $data = [
-            'hutang_id' => $this->detailHutang['id'],
-            'jumlah_bayar' => $this->jumlah_bayar,
-            'keterangan' => $this->keterangan
-        ];
-
         try {
             $client = new Client(['base_uri' => env('API_URL')]);
 
-            $res = $client->post('/api/hutang/bayar', [
+            $res1 = $client->get('/api/hutang/pengrajin/' . $pengrajinId, [
                 'headers' => [
                     'Accept' => 'application/json',
                     'Authorization' => 'Bearer ' . session('auth_data.token')
                 ],
-                'json' => $data
             ]);
 
-            $responseData = json_decode($res->getBody()->getContents(), true);
+            $res2 = $client->get('api/hutang/pengrajin/'.$pengrajinId.'/current-month', [
+                'headers' => [
+                    'Accept' => 'application/json',
+                    'Authorization' => 'Bearer ' . session('auth_data.token')
+                ],
+            ]);
 
-            session()->flash('success_message', $responseData['message']);
-            $this->reset(['jumlah_bayar', 'keterangan']);
-            $this->dispatch('close-modal');
-            $this->fetchData($this->detailHutang['id']);
+            $this->hutangDatas = json_decode($res1->getBody()->getContents(), true);
+            $this->hutangDatasOnCurrentMonth = json_decode($res2->getBody()->getContents(), true);
+            $this->listHutangBulanIni = $this->hutangDatasOnCurrentMonth['data_hutang'];
+
+            $this->bulanIni = Carbon::parse($this->hutangDatasOnCurrentMonth['current_month_year'])->translatedFormat('F Y');
+
         } catch (RequestException $e) {
             if ($e->hasResponse()) {
                 $response = $e->getResponse();
@@ -108,12 +102,6 @@ class HutangDetails extends Component
                     session()->flash('error_message', 'Forbidden.');
                     $this->redirectRoute('appDashboardPage');
                     return;
-                }
-                if ($response->getStatusCode() == 400) {
-                    session()->flash('error_message', $body->message);
-                    $this->reset(['jumlah_bayar', 'keterangan']);
-                    $this->dispatch('close-modal');
-                    return;
                 } else {
                     dd($body);
                 }
@@ -121,10 +109,9 @@ class HutangDetails extends Component
             throw $e;
         }
     }
-
 
     public function render()
     {
-        return view('livewire.app.hutang-piutang.hutang-details');
+        return view('livewire.app.hutang-piutang.scan-pengrajin');
     }
 }

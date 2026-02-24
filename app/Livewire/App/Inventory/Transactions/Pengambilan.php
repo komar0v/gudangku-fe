@@ -21,7 +21,6 @@ class Pengambilan extends Component
     public $pengrajin_id, $berat_pengambilan, $item_id;
     public $qrResult = "default";
     public $listItems;
-    public $isHutang=false;
 
     public function mount()
     {
@@ -139,7 +138,6 @@ class Pengambilan extends Component
             'item_id' => $this->item_id,
             'pengrajin_id' => $this->pengrajin_id,
             'berat_pengambilan' => $this->berat_pengambilan,
-            'is_hutang'=> $this->isHutang
         ];
 
         try {

@@ -45,7 +45,7 @@
                             <div>
                                 <small class="text-muted">Hutang Aktif</small>
                                 <h4 class="fw-bold mb-0">
-                                    {{ count($dataHutangs['detail']) }} Transaksi
+                                    {{ count($dataHutangs['detail']) }}
                                 </h4>
                             </div>
 
@@ -92,16 +92,16 @@
                 </div>
 
                 <div class="col-lg-3 col-md-6 col-12">
-                    <a href="{{route('appHutangPengrajinPage')}}">
+                    <a href="{{route('appScanHutangPengrajinPage')}}">
                     <div class="card shadow-sm border-0 h-100">
                         <div class="card-body d-flex align-items-center">
 
                             <div class="rounded-circle bg-success bg-opacity-10 p-3 me-3">
-                                <i class="bi bi-filter text-success fs-3"></i>
+                                <i class="bi bi-upc-scan text-success fs-3"></i>
                             </div>
 
                             <div>
-                                <h4 class="fw-bold mb-0">Filter Berdasarkan Pengrajin</h4>
+                                <h4 class="fw-bold mb-0">Scan Barcode Pengrajin</h4>
                             </div>
 
                         </div>
@@ -158,7 +158,7 @@
                                             </td>
 
                                             <td>
-                                                <a target="_blank" href="{{ route('appHutangDetails', ['transactionId' => $item['transaction_id']]) }}" class="btn btn-sm btn-outline-primary w-100">Detail Hutang</a>
+                                                <a target="_blank" href="{{ route('appHutangDetails', ['hutangId' => $item['id']]) }}" class="btn btn-sm btn-outline-primary w-100">Detail Hutang</a>
                                             </td>
                                         </tr>
                                         @empty

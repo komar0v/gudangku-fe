@@ -21,7 +21,6 @@ class Details extends Component
     public $transactionData;
     public $kategoriDataAmbil, $kategoriDataKembali, $satuanData, $pengrajinData;
     public $waktuPengambilan, $waktuPengembalian;
-    public $dataHutang;
 
     public function mount($transactionId)
     {
@@ -82,14 +81,6 @@ class Details extends Component
                 ],
             ]);
             $this->pengrajinData = json_decode($res4->getBody()->getContents(), true);
-
-            $res5 = $client->get('/api/hutang/check/' . $transactionId, [
-                'headers' => [
-                    'Accept' => 'application/json',
-                    'Authorization' => 'Bearer ' . session('auth_data.token')
-                ],
-            ]);
-            $this->dataHutang = json_decode($res5->getBody()->getContents(), true);
         } catch (RequestException $e) {
             if ($e->hasResponse()) {
                 $response = $e->getResponse();
@@ -104,45 +95,6 @@ class Details extends Component
 
                     session()->flash('error_message', 'Transaksi tidak ditemukan.');
                     $this->redirectRoute('appSupplierIndexPage', navigate: true);
-                    return;
-                } else {
-                    dd($body);
-                }
-            }
-            throw $e;
-        }
-    }
-
-    public function markHutang()
-    {
-        $data = [
-            'transaction_id' => $this->transactionData['id']
-        ];
-
-        try {
-            $client = new Client(['base_uri' => env('API_URL')]);
-
-            $res = $client->post('/api/hutang/transaction/mark', [
-                'headers' => [
-                    'Accept' => 'application/json',
-                    'Authorization' => 'Bearer ' . session('auth_data.token')
-                ],
-                'json' => $data
-            ]);
-
-            $responseData = json_decode($res->getBody()->getContents(), true);
-
-            session()->flash('success_message', $responseData['message']);
-            $this->mount($this->transactionData['id']);
-        } catch (RequestException $e) {
-            if ($e->hasResponse()) {
-                $response = $e->getResponse();
-                $body = json_decode($response->getBody()->getContents());
-
-                if ($response->getStatusCode() == 403) {
-                    //Forbidden
-                    session()->flash('error_message', 'Forbidden.');
-                    $this->redirectRoute('appDashboardPage');
                     return;
                 } else {
                     dd($body);

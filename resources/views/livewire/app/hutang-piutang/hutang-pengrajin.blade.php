@@ -1,6 +1,4 @@
 <div>
-    <script src="https://unpkg.com/slim-select@latest/dist/slimselect.js"></script>
-    <link href="https://unpkg.com/slim-select@latest/dist/slimselect.css" rel="stylesheet">
     <livewire:PartialView.App.Header />
     <livewire:PartialView.App.Sidebar />
 
@@ -12,7 +10,7 @@
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="{{route('appDashboardPage')}}">Home</a></li>
                     <li class="breadcrumb-item">Hutang Piutang</li>
-                    <li class="breadcrumb-item active">Filter</li>
+                    <li class="breadcrumb-item active">Pengrajin</li>
                 </ol>
             </nav>
         </div><!-- End Page Title -->
@@ -29,37 +27,6 @@
             <a href="{{route('appHutangStatisticsPage')}}" wire:navigate class="btn btn-secondary btn-sm mb-2"><i class="bi bi-arrow-left me-1"></i>Kembali</a>
 
             <div class="row">
-                <div class="col-lg-12">
-
-                    <div class="card info-card sales-card">
-
-                        <div class="card-body">
-                            <h5 class="card-title">Lihat Hutang Pengrajin</h5>
-                            <p>Filter data hutang berdasarkan pengrajin</p>
-                            <form>
-                                <div class="row mb-3">
-                                    <label class="col-sm-2 col-form-label">Pengrajin</label>
-                                    <div class="col-sm-10" wire:ignore>
-                                        <select wire:model="pengrajinId" style="width: 100%;" id="selectPengrajin" wire:key="selectPengrajin-{{ count($pengrajinLists) }}">>
-                                            <option value="" disabled selected>-Pilih Pengrajin-</option>
-                                            @foreach ($pengrajinLists as $pengrajin)
-                                            <option value="{{ $pengrajin['id'] }}">{{ $pengrajin['nama_pengrajin'] }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col text-center">
-                                        <button wire:click.prevent="showData" class="btn btn-primary"><i class="bi bi-eye me-1"></i>Lihat</button>
-                                    </div>
-                                </div>
-                            </form>
-
-                        </div>
-                    </div>
-                </div>
-
-                @if(!empty($hutangDatas))
                 <div class="col-12">
                     <div class="card shadow-sm border-0 pt-4">
                         <div class="card-body">
@@ -88,19 +55,21 @@
                                     <div class="border rounded p-3 bg-light">
                                         <small class="text-muted">Hutang Aktif</small>
                                         <h5 class="fw-bold mb-0">
-                                            {{ $hutangDatas['total_hutang_active'] }} Transaksi
+                                            {{ $hutangDatas['total_hutang_active'] }}
                                         </h5>
                                     </div>
                                 </div>
-
+                                <a class="btn btn-success" wire:navigate href="{{ route('appPeminjamanBaruPage', ['pengrajinId' => $pengrajinId]) }}">
+                                    <i class="bi bi-cash-coin me-1"></i>
+                                    Pinjaman Baru
+                                </a>
                             </div>
 
                             <div class="table-responsive">
-                                <table class="table table-hover align-middle">
+                                <table class="table table-hover align-middle datatable">
 
                                     <thead class="table-light">
                                         <tr>
-                                            <th>ID Transaksi</th>
                                             <th>Total Hutang</th>
                                             <th>Sisa Hutang</th>
                                             <th>Status</th>
@@ -112,16 +81,16 @@
                                     <tbody>
                                         @forelse($hutangDatas['data_hutang'] as $hutang)
                                         <tr>
-                                            <td class="fw-semibold">
-                                                {{ explode('-', $hutang['transaction_id'])[1] ?? '-' }}
-                                            </td>
-
                                             <td>
                                                 Rp {{ number_format($hutang['total_hutang'], 0, ',', '.') }}
                                             </td>
 
-                                            <td class="text-danger fw-semibold">
+                                            <td class="fw-semibold {{ (float)$hutang['sisa_hutang'] > 0 ? 'text-danger' : 'text-success' }}">
+                                                @if((float)$hutang['sisa_hutang'] > 0)
                                                 Rp {{ number_format($hutang['sisa_hutang'], 0, ',', '.') }}
+                                                @else
+                                                Lunas
+                                                @endif
                                             </td>
 
                                             <td>
@@ -133,11 +102,11 @@
                                             </td>
 
                                             <td>
-                                                {{ \Carbon\Carbon::parse($hutang['created_at'])->format('d M Y') }}
+                                                {{ \App\Helpers\IndoDateFormat::formatIndo($hutang['created_at'])}}
                                             </td>
 
                                             <td>
-                                                <a target="_blank" href="{{ route('appHutangDetails', ['transactionId' => $hutang['transaction_id']]) }}" class="btn btn-sm btn-outline-primary w-100">Detail Hutang</a>
+                                                <a target="_blank" href="{{ route('appHutangDetails', ['hutangId' => $hutang['id']]) }}" class="btn btn-sm btn-outline-primary w-100">Detail Hutang</a>
                                             </td>
                                         </tr>
                                         @empty
@@ -155,7 +124,6 @@
                         </div>
                     </div>
                 </div>
-                @endif
 
             </div>
 
@@ -163,29 +131,5 @@
 
 
     </main><!-- End #main -->
-    <script>
-        (function() {
-            let ss2 = null;
-
-            function initSlim2() {
-                const el = document.getElementById('selectPengrajin');
-                if (!el) return;
-
-                if (ss2 && typeof ss.destroy === 'function') {
-                    ss2.destroy();
-                    ss2 = null;
-                }
-                ss2 = new SlimSelect({
-                    select: el
-                });
-            }
-
-            document.addEventListener('DOMContentLoaded', initSlim2);
-
-            window.addEventListener('init-slim-select2', () => {
-                requestAnimationFrame(initSlim2);
-            });
-        })();
-    </script>
     <livewire:PartialView.App.Footer />
 </div>

@@ -16,59 +16,24 @@ class HutangPengrajin extends Component
     #[Layout('components.layouts.applayout')]
     #[Title('Hutang Pengrajin')]
 
-    public $pengrajinLists;
     public $hutangDatas = null;
     public $pengrajinId;
 
-    public function mount()
+    public function mount($pengrajinId)
     {
         if (! $this->ensureAuthenticated()) {
             return;
         }
-        $this->dispatch('init-slim-select2');
-        $this->fetchDataPengrajin();
+        $this->showData($pengrajinId);
     }
 
-    public function fetchDataPengrajin()
+    public function showData($pengrajinId)
     {
+        $this->pengrajinId;
         try {
             $client = new Client(['base_uri' => env('API_URL')]);
 
-            $resPengrajin = $client->get('/api/pengrajin-all-lite', [
-                'headers' => [
-                    'Accept' => 'application/json',
-                    'Authorization' => 'Bearer ' . session('auth_data.token')
-                ],
-            ]);
-
-            $this->pengrajinLists = json_decode($resPengrajin->getBody()->getContents(), true);
-        } catch (RequestException $e) {
-            if ($e->hasResponse()) {
-                $response = $e->getResponse();
-                $body = json_decode($response->getBody()->getContents());
-
-                if ($response->getStatusCode() == 403) {
-                    //Forbidden
-                    session()->flash('error_message', 'Forbidden.');
-                    $this->redirectRoute('appDashboardPage');
-                    return;
-                } else if ($response->getStatusCode() == 422) {
-                    session()->flash('error_message', $body->message);
-                    return;
-                } else {
-                    dd($body);
-                }
-            }
-            throw $e;
-        }
-    }
-
-    public function showData()
-    {
-        try {
-            $client = new Client(['base_uri' => env('API_URL')]);
-
-            $hutangDatas = $client->get('/api/hutang/pengrajin/'.$this->pengrajinId, [
+            $hutangDatas = $client->get('/api/hutang/pengrajin/' . $pengrajinId, [
                 'headers' => [
                     'Accept' => 'application/json',
                     'Authorization' => 'Bearer ' . session('auth_data.token')
@@ -89,12 +54,10 @@ class HutangPengrajin extends Component
                 } else if ($response->getStatusCode() == 422) {
                     session()->flash('error_message', $body->message);
                     return;
-                }
-                else if ($response->getStatusCode() == 404) {
+                } else if ($response->getStatusCode() == 404) {
                     session()->flash('error_message', 'Data Tidak ditemukan. Periksa kembali.');
                     return;
-                }
-                else {
+                } else {
                     dd($body);
                 }
             }

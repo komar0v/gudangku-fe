@@ -119,7 +119,7 @@
                                         @forelse($detailHutang['cicilan'] as $cicilan)
                                         <tr>
                                             <td>
-                                                {{ \Carbon\Carbon::parse($cicilan['created_at'])->format('d M Y H:i') }}
+                                                {{ \App\Helpers\IndoDateFormat::formatIndo($cicilan['created_at']) }}
                                             </td>
                                             <td class="text-success fw-semibold">
                                                 Rp {{ number_format($cicilan['jumlah_bayar'], 0, ',', '.') }}
