@@ -18,6 +18,7 @@ class HutangPengrajin extends Component
 
     public $hutangDatas = null;
     public $pengrajinId;
+    public $namaPengrajin;
 
     public function mount($pengrajinId)
     {
@@ -41,6 +42,15 @@ class HutangPengrajin extends Component
             ]);
 
             $this->hutangDatas = json_decode($hutangDatas->getBody()->getContents(), true)['data'];
+
+            $res2 = $client->get('/api/pengrajin-barcode-search/' . $pengrajinId, [
+                'headers' => [
+                    'Accept' => 'application/json',
+                    'Authorization' => 'Bearer ' . session('auth_data.token')
+                ],
+            ]);
+
+            $this->namaPengrajin = json_decode($res2->getBody()->getContents(), true)['nama_pengrajin'];
         } catch (RequestException $e) {
             if ($e->hasResponse()) {
                 $response = $e->getResponse();

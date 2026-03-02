@@ -30,6 +30,10 @@
                 <div class="col-12">
                     <div class="card shadow-sm border-0 pt-4">
                         <div class="card-body">
+                            <div class="mb-3">
+                                <strong>Pengrajin:</strong>
+                                {{ $namaPengrajin }}
+                            </div>
 
                             <div class="row g-3 mb-4 text-center">
 

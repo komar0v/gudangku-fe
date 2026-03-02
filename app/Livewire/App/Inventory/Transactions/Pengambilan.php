@@ -17,7 +17,7 @@ class Pengambilan extends Component
     #[Title('Pengambilan')]
 
     public $successMessage, $errorMessage;
-    public $stokData, $pengrajinData;
+    public $stokData, $pengrajinData, $hutangData;
     public $pengrajin_id, $berat_pengambilan, $item_id;
     public $qrResult = "default";
     public $listItems;
@@ -72,6 +72,9 @@ class Pengambilan extends Component
             ]);
 
             $this->pengrajinData = json_decode($res1->getBody()->getContents(), true);
+            if($this->pengrajinData['is_found']){
+                $this->cekHutang($this->pengrajinData['id']);
+            }
         } catch (RequestException $e) {
             if ($e->hasResponse()) {
                 $response = $e->getResponse();
@@ -110,6 +113,38 @@ class Pengambilan extends Component
                 ],
             ]);
             $this->stokData = json_decode($res->getBody()->getContents(), true);
+        } catch (RequestException $e) {
+            if ($e->hasResponse()) {
+                $response = $e->getResponse();
+                $body = json_decode($response->getBody()->getContents());
+
+                if ($response->getStatusCode() == 403) {
+                    //Forbidden
+                    session()->flash('error_message', 'Forbidden.');
+                    $this->redirectRoute('appDashboardPage');
+                    return;
+                } else {
+                    dd($body);
+                }
+            }
+            throw $e;
+        }
+    }
+
+    public function cekHutang($pengrajin_id){
+        try {
+            $client = new Client(['base_uri' => env('API_URL')]);
+
+            $resHutang = $client->get('/api/hutang/get-active/'.$pengrajin_id, [
+                'headers' => [
+                    'Accept' => 'application/json',
+                    'Authorization' => 'Bearer ' . session('auth_data.token')
+                ],'json'=> [
+                    'pengrajin_id'=>$pengrajin_id
+                ]
+            ]);
+
+            $this->hutangData = json_decode($resHutang->getBody()->getContents(), true);
         } catch (RequestException $e) {
             if ($e->hasResponse()) {
                 $response = $e->getResponse();

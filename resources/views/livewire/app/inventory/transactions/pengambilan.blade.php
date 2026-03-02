@@ -113,24 +113,73 @@
                 </div>
 
                 <div class="col-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Stok ketersediaan</h5>
+                    <div class="row">
+                        <div class="col">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Stok ketersediaan</h5>
 
-                            <div id="loading" wire:loading wire:target="cekStok" style="text-align: center;">
-                                <img width="80" height="80" src="{{ url(env('APP_ASSET_URL') . '/img/loading.gif') }}" alt="Loading...">
-                                <p>loading...</p>
+                                    <div id="loading" wire:loading wire:target="cekStok" style="text-align: center;">
+                                        <img width="80" height="80" src="{{ url(env('APP_ASSET_URL') . '/img/loading.gif') }}" alt="Loading...">
+                                        <p>loading...</p>
+                                    </div>
+
+                                    <div wire:loading.remove wire:target="cekStok">
+                                        @if(!empty($stokData))
+                                        <p><strong>Kategori :</strong> {{ $stokData['nama_kategori']??'0' }}</p>
+                                        <p><strong>Nama Barang :</strong> {{ $stokData['nama_barang']??'0' }}</p>
+                                        <p><strong>Harga :</strong> Rp. {{ number_format($stokData['harga'], 0, ',', '.') }}</p>
+                                        <p><strong>Stok :</strong> {{ $stokData['quantity']??'0' }} {{ $stokData['kode_satuan']??'' }}</p>
+                                        @else
+                                        <p>Silakan pilih barang untuk melihat stok.</p>
+                                        @endif
+                                    </div>
+                                </div>
                             </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="card">
+                                <div class="card-body">
 
-                            <div wire:loading.remove wire:target="cekStok">
-                                @if(!empty($stokData))
-                                <p><strong>Kategori :</strong> {{ $stokData['nama_kategori']??'0' }}</p>
-                                <p><strong>Nama Barang :</strong> {{ $stokData['nama_barang']??'0' }}</p>
-                                <p><strong>Harga :</strong> Rp. {{ number_format($stokData['harga'], 0, ',', '.') }}</p>
-                                <p><strong>Stok :</strong> {{ $stokData['quantity']??'0' }} {{ $stokData['kode_satuan']??'' }}</p>
-                                @else
-                                <p>Silakan pilih barang untuk melihat stok.</p>
-                                @endif
+                                    <h5 class="card-title">Data Hutang Piutang</h5>
+
+                                    @if(!empty($hutangData))
+
+                                    <div class="bg-light rounded p-3 mb-3">
+
+                                        <small class="text-muted d-block mb-1">
+                                            Total Hutang Aktif
+                                        </small>
+
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <h4 class="fw-bold mb-0 {{ $hutangData['total_hutang_aktif'] > 0 ? 'text-danger' : 'text-dark' }}">
+                                                {{ $hutangData['total_hutang_aktif'] }}
+                                            </h4>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="d-grid">
+                                        <a target="_blank"
+                                            class="btn btn-primary btn-sm"
+                                            href="{{ route('appHutangPengrajinPage', ['pengrajinId' => $pengrajinData['id']]) }}">
+                                            <i class="bi bi-eye me-1"></i>
+                                            Lihat Data Lengkap
+                                        </a>
+                                    </div>
+
+                                    @else
+
+                                    <div class="text-center py-4 text-muted">
+                                        <i class="bi bi-upc-scan fs-3 d-block mb-2"></i>
+                                        Arahkan barcode ke kamera
+                                    </div>
+
+                                    @endif
+
+                                </div>
                             </div>
                         </div>
                     </div>
