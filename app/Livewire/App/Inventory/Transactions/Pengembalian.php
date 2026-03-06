@@ -20,7 +20,7 @@ class Pengembalian extends Component
 
     public $successMessage, $errorMessage;
     public $qrResult = "default", $bulanIni, $transactionId = "", $berat_pengembalian, $itemId = "";
-    public $pengrajinData;
+    public $pengrajinData, $hutangData;
     public $transactionList, $transactionListLite, $inventoryItemList;
     public $upah;
 
@@ -56,6 +56,7 @@ class Pengembalian extends Component
 
             if ($this->pengrajinData['is_found']) {
 
+                $this->cekHutang($this->pengrajinData['id']);
                 $this->fetchTransactionListLite();
                 $this->fetchTransactionList();
                 $this->dispatch('init-slim-select');
@@ -140,6 +141,36 @@ class Pengembalian extends Component
             ]);
 
             $this->transactionListLite = json_decode($res3->getBody()->getContents(), true);
+        } catch (RequestException $e) {
+            if ($e->hasResponse()) {
+                $response = $e->getResponse();
+                $body = json_decode($response->getBody()->getContents());
+
+                if ($response->getStatusCode() == 403) {
+                    //Forbidden
+                    session()->flash('error_message', 'Forbidden.');
+                    $this->redirectRoute('appDashboardPage');
+                    return;
+                } else {
+                    dd($body);
+                }
+            }
+            throw $e;
+        }
+    }
+
+    public function cekHutang($pengrajin_id){
+        try {
+            $client = new Client(['base_uri' => env('API_URL')]);
+
+            $resHutang = $client->get('/api/hutang/get-active/'.$pengrajin_id, [
+                'headers' => [
+                    'Accept' => 'application/json',
+                    'Authorization' => 'Bearer ' . session('auth_data.token')
+                ]
+            ]);
+
+            $this->hutangData = json_decode($resHutang->getBody()->getContents(), true);
         } catch (RequestException $e) {
             if ($e->hasResponse()) {
                 $response = $e->getResponse();

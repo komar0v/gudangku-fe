@@ -137,7 +137,53 @@
 
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="card">
+                                <div class="card-body">
+
+                                    <h5 class="card-title">Data Hutang Piutang</h5>
+
+                                    @if(!empty($hutangData))
+
+                                    <div class="bg-light rounded p-3 mb-3">
+
+                                        <small class="text-muted d-block mb-1">
+                                            Total Hutang Aktif
+                                        </small>
+
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <h4 class="fw-bold mb-0 {{ $hutangData['total_hutang_aktif'] > 0 ? 'text-danger' : 'text-dark' }}">
+                                                {{ $hutangData['total_hutang_aktif'] }}
+                                            </h4>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="d-grid">
+                                        <a target="_blank"
+                                            class="btn btn-primary btn-sm"
+                                            href="{{ route('appHutangPengrajinPage', ['pengrajinId' => $pengrajinData['id']]) }}">
+                                            <i class="bi bi-eye me-1"></i>
+                                            Lihat Data Lengkap
+                                        </a>
+                                    </div>
+
+                                    @else
+
+                                    <div class="text-center py-4 text-muted">
+                                        <i class="bi bi-upc-scan fs-3 d-block mb-2"></i>
+                                        Arahkan barcode ke kamera
+                                    </div>
+
+                                    @endif
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+
 
             </div>
 

@@ -139,8 +139,6 @@ class Pengambilan extends Component
                 'headers' => [
                     'Accept' => 'application/json',
                     'Authorization' => 'Bearer ' . session('auth_data.token')
-                ],'json'=> [
-                    'pengrajin_id'=>$pengrajin_id
                 ]
             ]);
 
