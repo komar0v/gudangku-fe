@@ -54,6 +54,33 @@
                     </div>
                 </div>
 
+                <div class="col-lg-4">
+
+                    <div class="card info-card customers-card">
+
+                        <div class="card-body">
+                            <h5 class="card-title">Pengrajin Libur<span class="text-muted text-small"> (Tidak ngambil lagi dalam waktu lebih dari 10 hari)</span></h5>
+                            <div class="row">
+                                <div class="col d-flex align-items-center">
+                                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                        <i class="bi bi-calendar3-week-fill"></i>
+                                    </div>
+                                    <div class="ps-3">
+                                        <h6>{{$countPengrajinLibur}}</h6>
+                                        <span class="text-muted small pt-2 ps-1">Pengrajin</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="col d-flex align-items-center">
+                                    <a href="{{ route('appInactiveSupplierPage') }}" wire:navigate class="btn btn-info">
+                                        <i class="bi bi-arrow-right me-2"></i>Selengkapnya
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </section>
 

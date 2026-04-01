@@ -18,7 +18,7 @@ class Index extends Component
     #[Title('Pengrajin Master Data')]
 
     public $recentlyAddSuppliers;
-    public $countSupplier;
+    public $countSupplier, $countPengrajinLibur;
     public $searchQuery;
 
     public function mount()
@@ -45,6 +45,15 @@ class Index extends Component
                     'Authorization' => 'Bearer ' . session('auth_data.token')
                 ],
             ]);
+
+            $res3 = $client->get('/api/count/pengrajin-get-inactive', [
+                'headers' => [
+                    'Accept' => 'application/json',
+                    'Authorization' => 'Bearer ' . session('auth_data.token')
+                ],
+            ]);
+
+            $this->countPengrajinLibur = json_decode($res3->getBody()->getContents(), true)['total_pengrajin_inactive'];
 
             $this->recentlyAddSuppliers = collect(json_decode($res2->getBody()->getContents(), true))->map(function ($item) {
                 return [

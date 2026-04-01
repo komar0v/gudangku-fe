@@ -2,42 +2,39 @@
 
 namespace App\Livewire\App\Supplier;
 
-use GuzzleHttp\Client;
-use Livewire\Component;
-use Livewire\Attributes\Title;
-use Livewire\Attributes\Layout;
 use App\Livewire\Traits\RequireLogin;
+use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
+use Livewire\Attributes\Layout;
+use Livewire\Attributes\Title;
+use Livewire\Component;
 
-class VisitHistory extends Component
+class Inactive extends Component
 {
     use RequireLogin;
 
     #[Layout('components.layouts.applayout')]
-    #[Title('Visit Log')]
+    #[Title('Inactive')]
 
-    public $suppId;
-    public $visitLogs;
+    public $inactivePengrajin;
 
-    public function mount($supplierId)
+    public function mount()
     {
         if (! $this->ensureAuthenticated()) {
             return;
         }
 
-        $this->suppId = $supplierId;
-
         try {
             $client = new Client(['base_uri' => env('API_URL')]);
 
-            $res1 = $client->get('/api/super-admin/statistics/pengrajin/' . $supplierId . '/get-full-history', [
+            $res1 = $client->get('/api/pengrajin-get-inactive', [
                 'headers' => [
                     'Accept' => 'application/json',
                     'Authorization' => 'Bearer ' . session('auth_data.token')
                 ],
             ]);
 
-            $this->visitLogs = json_decode($res1->getBody()->getContents(), true);
+            $this->inactivePengrajin = json_decode($res1->getBody()->getContents(), true);
         } catch (RequestException $e) {
             if ($e->hasResponse()) {
                 $response = $e->getResponse();
@@ -55,9 +52,9 @@ class VisitHistory extends Component
             throw $e;
         }
     }
-
+    
     public function render()
     {
-        return view('livewire.app.supplier.visit-history');
+        return view('livewire.app.supplier.inactive');
     }
 }

@@ -55,7 +55,7 @@
             </li>
 
             <li class="nav-item">
-                <a wire:navigate class="nav-link {{ request()->routeIs('appSupplierEditDataPage')||request()->routeIs('appSupplierIndexPage')||request()->routeIs('appRegisterSupplierPage')||request()->routeIs('appShowAllSupplierPage')||request()->routeIs('appSupplierDetailPage') ? '' : 'collapsed' }}" href="{{route('appSupplierIndexPage')}}">
+                <a wire:navigate class="nav-link {{ request()->routeIs('appSupplierEditDataPage')||request()->routeIs('appSupplierIndexPage')||request()->routeIs('appRegisterSupplierPage')||request()->routeIs('appShowAllSupplierPage')||request()->routeIs('appSupplierDetailPage')||request()->routeIs('appInactiveSupplierPage') ? '' : 'collapsed' }}" href="{{route('appSupplierIndexPage')}}">
                     <i class="bi bi-people"></i>
                     <span>Pengrajin Master</span>
                 </a>

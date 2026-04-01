@@ -61,6 +61,7 @@ use App\Livewire\App\Supplier\Edit as SupplierEditDataPage;
 use App\Livewire\App\Supplier\Index as SupplierIndexPage;
 use App\Livewire\App\Supplier\Register as RegisterSupplierPage;
 use App\Livewire\App\Supplier\ShowAll as AllSuppliersPage;
+use App\Livewire\App\Supplier\Inactive as InactiveSuppliersPage;
 use App\Livewire\App\Supplier\Search as SupplierSearchResultPage;
 use App\Livewire\App\Supplier\SearchWithBarcode as SupplierSearchByBarcodePage;
 
@@ -119,6 +120,7 @@ Route::get('/app/statistics/observer', StockStatisticsPage::class)->name('appSta
 Route::get('/app/pengrajin', SupplierIndexPage::class)->name('appSupplierIndexPage');
 Route::get('/app/pengrajin/register', RegisterSupplierPage::class)->name('appRegisterSupplierPage');
 Route::get('/app/pengrajin/all', AllSuppliersPage::class)->name('appShowAllSupplierPage');
+Route::get('/app/pengrajin/inactive', InactiveSuppliersPage::class)->name('appInactiveSupplierPage');
 Route::get('/app/pengrajin/{supplierId}/details', SupplierDetailPage::class)->name('appSupplierDetailPage');
 Route::get('/app/pengrajin/{supplierId}/details/visit-logs', SupplierVisitLogsPage::class)->name('appSupplierVisitLogsPage');
 Route::get('/app/pengrajin/details/{supplierId}/edit', SupplierEditDataPage::class)->name('appSupplierEditDataPage');
