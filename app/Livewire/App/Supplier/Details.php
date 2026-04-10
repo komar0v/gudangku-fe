@@ -98,6 +98,41 @@ class Details extends Component
         }, $filename);
     }
 
+    public function hapusPengrajin()
+    {
+        try {
+            $client = new Client(['base_uri' => env('API_URL')]);
+
+            $res = $client->delete('/api/super-admin/manage/pengrajin/delete/'.$this->supplierData['id'], [
+                'headers' => [
+                    'Accept' => 'application/json',
+                    'Authorization' => 'Bearer ' . session('auth_data.token')
+                ],
+            ]);
+
+            $responseData = json_decode($res->getBody()->getContents(), true);
+
+            session()->flash('success_message', $responseData['message']);
+
+            $this->redirectRoute('appSupplierIndexPage', navigate: true);
+        } catch (RequestException $e) {
+            if ($e->hasResponse()) {
+                $response = $e->getResponse();
+                $body = json_decode($response->getBody()->getContents());
+
+                if ($response->getStatusCode() == 422) {
+
+                    session()->flash('error_message', $body->message);
+                    // $this->redirectRoute('accountInfoPage');
+                    return;
+                } else {
+                    dd($body);
+                }
+            }
+            throw $e;
+        }
+    }
+
     public function render()
     {
         return view('livewire.app.supplier.details');

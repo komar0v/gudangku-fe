@@ -106,11 +106,11 @@
                                                 <div class="col-lg-9 col-md-8">{{$count_visit_log ?? '-' }} kali</div>
                                             </div>
 
-                                            @if(!empty($count_visit_log))
+                                            @if(!empty($last_visit))
                                             <div class="row">
                                                 <div class="col-lg-3 col-md-4 label"></div>
                                                 <div class="col-lg-9 col-md-8"><a wire:navigate href="{{route('appSupplierVisitLogsPage', ['supplierId' => $supplierData['id']])}}" class="btn btn-success btn-sm"><i class="bi bi-clock-history me-1"></i>Riwayat Kunjungan</a></div>
-                                                
+
                                             </div>
                                             @endif
                                         </div>
@@ -156,6 +156,42 @@
                                     <div class="text-center">
                                         <a wire:navigate href="{{route('appSupplierEditDataPage', ['supplierId' => $supplierData['id']])}}" class="btn btn-warning"><i class="bx bxs-edit"></i>
                                             Edit Data Pengrajin</a>
+                                    </div>
+
+                                    <div class="text-center pt-2">
+                                        <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalHapus"><i class="bx bxs-trash"></i>
+                                            Hapus Data Pengrajin
+                                        </button>
+
+                                        <div class="modal fade" id="modalHapus" tabindex="-1">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">Hapus Pengrajin</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <p>Anda yakin ingin menghapus pengrajin <strong>"{{$supplierData['nama_pengrajin']}}"</strong>?</p>
+                                                        <p>Pengrajin akan dihapus dari database tetapi semua data (transaksi, hutang, dll) terkait pengrajin ini akan tetap tersimpan di database</p>
+                                                        <p>Lanjut hapus?</p>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                                        <button type="button" wire:click="hapusPengrajin" class="btn btn-danger">
+
+                                                            <span wire:loading.remove wire:target="hapusPengrajin">
+                                                                <i class="bx bxs-trash me-1"></i> Ya, hapus
+                                                            </span>
+
+                                                            <span wire:loading wire:target="hapusPengrajin">
+                                                                <span class="spinner-border spinner-border-sm me-1"></span>
+                                                                Menghapus...
+                                                            </span>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
 
                                 </div>
